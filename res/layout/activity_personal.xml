@@ -1,0 +1,206 @@
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" >
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:isScrollContainer="true"
+        android:scrollbars="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentTop="true"
+		    android:background="@drawable/bkgrnd"
+		    android:orientation="vertical" >
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                    
+                    <TextView
+                        android:id="@+id/TextView_FirstName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_firstname"
+                        android:textSize="@dimen/help_text_size"
+                        android:textStyle="bold">
+                    </TextView>
+
+                    <EditText
+                        android:id="@+id/EditText_FirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="right"
+                        android:inputType="textPersonName" />
+
+         </LinearLayout>           
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                    <TextView
+                        android:id="@+id/TextView_LastName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_lastname"
+                        android:textSize="@dimen/help_text_size"
+                        android:textStyle="bold">
+                    </TextView>
+                    <EditText
+                        android:id="@+id/EditText_LastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textPersonName" >
+                    </EditText>
+         </LinearLayout> 	    
+	     <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                    	android:orientation="vertical"
+                    	android:layout_width="fill_parent"
+                    	android:layout_height="fill_parent">
+                    
+                    <TextView
+                        android:id="@+id/TextView_Nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_nickname"
+                        android:textSize="@dimen/help_text_size"
+                        android:textStyle="bold"></TextView>
+                    <EditText
+                        android:id="@+id/EditText_Nickname"
+                        android:layout_height="wrap_content"
+                        android:maxLength="20"
+                        android:layout_width="fill_parent"
+                        android:maxLines="1"
+                        android:inputType="textPersonName"></EditText>
+         </LinearLayout>
+
+	     <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                    	android:orientation="vertical"
+                    	android:layout_width="fill_parent"
+                    	android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/TextView_Email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_email"
+                android:textSize="@dimen/help_text_size"
+                android:textStyle="bold"></TextView>
+            <EditText
+                android:id="@+id/EditText_Email"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:maxLines="1"
+                android:inputType="textEmailAddress"></EditText>
+            </LinearLayout>
+
+	     <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                    	android:orientation="vertical"
+                    	android:layout_width="fill_parent"
+                    	android:layout_height="fill_parent">
+	     <TextView
+                android:id="@+id/TextView_Password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_password"
+                android:textSize="@dimen/help_text_size"
+                android:textStyle="bold"></TextView>
+	        <EditText
+                android:id="@+id/EditText_Password"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:maxLines="1"
+                android:inputType="textPassword"></EditText>
+	     </LinearLayout>
+	     <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                    	android:orientation="vertical"
+                    	android:layout_width="fill_parent"
+                    	android:layout_height="fill_parent">
+	     <TextView
+                android:id="@+id/TextView_ConfirmPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_confirmpassword"
+                android:textSize="@dimen/help_text_size"
+                android:textStyle="bold"></TextView>
+	        <EditText
+                android:id="@+id/EditText_ConfirmPassword"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:maxLines="1"
+                android:inputType="textPassword"></EditText>
+
+        <TextView
+            android:id="@+id/TextView_PwdProblem"
+            android:layout_width="114dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@color/error_color"
+            android:textSize="@dimen/help_text_size"
+            android:textStyle="bold" >
+</TextView>
+	     </LinearLayout>
+
+	     	     <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                    	android:orientation="vertical"
+                    	android:layout_width="fill_parent"
+                    	android:layout_height="fill_parent">	     
+	     	<TextView
+                android:id="@+id/TextView_DOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_dob"
+                android:textSize="@dimen/help_text_size"
+                android:textStyle="bold"></TextView>
+            	<LinearLayout
+                	android:id="@+id/LinearLayout01"
+                	android:orientation="horizontal"
+                	android:layout_height="wrap_content"
+                	android:layout_width="fill_parent">
+
+            		<Button
+            		    android:id="@+id/Button_DOB"
+            		    android:layout_width="wrap_content"
+            		    android:layout_height="wrap_content"
+            		    android:text="@string/settings_button_dob" />
+
+                	<TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:textSize="@dimen/help_text_size"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:id="@+id/TextView_DOB_Info"></TextView>
+            	</LinearLayout>
+		</LinearLayout>
+		<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                    	android:orientation="vertical"
+                    	android:layout_width="fill_parent"
+                    	android:layout_height="fill_parent">
+            <TextView
+                android:id="@+id/TextView_Gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_gender"
+                android:textSize="@dimen/help_text_size"
+                android:textStyle="bold"></TextView>
+            <Spinner
+                android:id="@+id/Spinner_Gender"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"></Spinner>
+        </LinearLayout>
+	</LinearLayout>
+  </ScrollView>
+	<Button
+	    android:id="@+id/btnRegister"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:text="@string/btn_Register" />
+        
+    </RelativeLayout>

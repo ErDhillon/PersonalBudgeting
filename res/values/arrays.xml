@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="variablecategories">
+        <item>@string/grocery</item>
+        <item>@string/utilities</item>
+        <item>@string/diningout</item>
+        <item>@string/travel</item>
+        <item>@string/shoping</item>
+        <item>@string/gas</item>
+        <item>@string/medical</item>
+        <item>@string/misc</item>
+    </string-array>
+    <string-array
+        name="fixedcategories">
+        <item>@string/mortgage</item>
+        <item>@string/rentalinsurance</item>
+        <item>@string/carloan</item>
+        <item>@string/carinsurance</item>
+        <item>@string/daycare</item>
+        <item>@string/healthinsurance</item>
+        <item>@string/lifeinsurance</item>
+        <item>@string/fixedmisc</item>        
+    </string-array>
+</resources>

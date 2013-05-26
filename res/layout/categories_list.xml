@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/radioCatgoryGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" > -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+        android:id="@+id/categoryList"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RadioButton
+        android:id="@+id/radioButtonGrocery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/grocery" />
+
+    <RadioButton
+        android:id="@+id/radioButtonGas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gas" />
+
+    <RadioButton
+        android:id="@+id/radioButtonDinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/diningout" />
+
+    <RadioButton
+        android:id="@+id/radioButtonMedical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/medical" />
+
+    <RadioButton
+        android:id="@+id/radioButtonMisc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/misc" />
+    </LinearLayout>

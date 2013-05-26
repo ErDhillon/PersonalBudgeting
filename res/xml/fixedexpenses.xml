@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<expenses>
+    <expense
+        date="02/12/2013"
+        category="Rent"
+        amount="1701" />
+    <expense
+        date="02/13/2013"
+        category="Car Insurance"
+        amount="70" />
+</expenses>
