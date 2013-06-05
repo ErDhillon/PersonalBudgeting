@@ -22,4 +22,9 @@
         <item>@string/lifeinsurance</item>
         <item>@string/fixedmisc</item>        
     </string-array>
+    <string-array 
+        name="repeatlist">
+        <item>@string/none</item>
+        <item>@string/monthly</item>
+    </string-array>
 </resources>

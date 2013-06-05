@@ -2,6 +2,11 @@ package com.fateh.personalbudgeting;
 
 import android.app.Activity;
 
+/***************
+ * For Shared Preferences
+ * @author administrator
+ *
+ */
 public class ActivityExt extends Activity {
 
     // Game preference values
@@ -18,6 +23,7 @@ public class ActivityExt extends Activity {
     public static final String BUDGET_PREFERENCES_TOTAL_VARIABLE_EXPENSES = "variableExpenses";
     public static final String BUDGET_PREFERENCES_DATE = "date";
     public static final String BUDGET_PREFERENCES_CATEGORY = "category";
+    public static final String BUDGET_PREFERENCES_REPEAT="repeat";
     
 
     public static final String DEBUG_TAG = "PersonalBudgetLog";

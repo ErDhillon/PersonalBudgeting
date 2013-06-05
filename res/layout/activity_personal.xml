@@ -139,7 +139,7 @@
             android:layout_width="114dp"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:textColor="@color/error_color"
+            android:textColor="@color/articlecolor"
             android:textSize="@dimen/help_text_size"
             android:textStyle="bold" >
 </TextView>

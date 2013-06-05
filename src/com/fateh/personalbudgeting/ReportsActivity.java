@@ -13,6 +13,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+/**********
+ * Report Generation
+ * @author administrator
+ *
+ */
 public class ReportsActivity extends ActivityExt {
 	
 	public ArrayList<ExpenseData> outputFixedExpList = new ArrayList<ExpenseData>();
@@ -56,23 +61,23 @@ public class ReportsActivity extends ActivityExt {
         db.getWritableDatabase();
         
         outputFixedExpList.clear();
-        outputFixedExpList = db.getFixedExpenses();
+        outputFixedExpList = db.getFixedExpenses("");
         for(int i =0; i<outputFixedExpList.size();i++)
         {
         	String category = outputFixedExpList.get(i).GetCategory();
         	Float amount = outputFixedExpList.get(i).GetAmount();
         	String date = outputFixedExpList.get(i).GetDate();
-        	insertScoreRow(fixedExpenseTable, date, category, amount.toString());
+        	insertExpenseRow(fixedExpenseTable, date, category, amount.toString());
         }
         
         outputVariableExpList.clear();
-        outputVariableExpList = db.getVariableExpenses();
+        outputVariableExpList = db.getVariableExpenses("");
         for(int i =0; i<outputVariableExpList.size();i++)
         {
         	String category = outputVariableExpList.get(i).GetCategory();
         	Float amount = outputVariableExpList.get(i).GetAmount();
         	String date = outputVariableExpList.get(i).GetDate();
-        	insertScoreRow(variableExpenseTable, date, category, amount.toString());
+        	insertExpenseRow(variableExpenseTable, date, category, amount.toString());
         }
     }
 
@@ -86,7 +91,7 @@ public class ReportsActivity extends ActivityExt {
         // Create the Table header row
         TableRow headerRow = new TableRow(this);
 
-        int textColor = getResources().getColor(R.color.logo_color);
+        int textColor = getResources().getColor(R.color.cachecolor);
         float textSize = getResources().getDimension(R.dimen.version_size);
 
         addTextToRowWithValues(headerRow, getResources().getString(R.string.reportdate), color.holo_red_light, com.fateh.personalbudgeting.R.dimen.help_text_size);
@@ -95,22 +100,10 @@ public class ReportsActivity extends ActivityExt {
         scoreTable.addView(headerRow);
     }
 
-    /**
-     * {@code processScores()} helper method -- Inserts a new score {@code TableRow} in the {@code TableLayout}
-     * 
-     * @param scoreTable
-     *            The {@code TableLayout} to add the score to
-     * @param scoreValue
-     *            The value of the score
-     * @param scoreRank
-     *            The ranking of the score
-     * @param scoreUserName
-     *            The user who made the score
-     */
-    private void insertScoreRow(final TableLayout expenseTable, String date, String category, String amount) {
+    private void insertExpenseRow(final TableLayout expenseTable, String date, String category, String amount) {
         final TableRow newRow = new TableRow(this);
 
-        int textColor = getResources().getColor(R.color.menu_glow);
+        int textColor = getResources().getColor(R.color.DarkOliveGreen);
         float textSize = getResources().getDimension(R.dimen.version_size);
 
         addTextToRowWithValues(newRow, date, textColor, textSize);

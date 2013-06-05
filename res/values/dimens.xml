@@ -9,7 +9,7 @@
     <dimen
         name="screen_title_size">16pt</dimen>
     <dimen
-        name="menu_item_size">16pt</dimen>
+        name="menu_item_size">10pt</dimen>
     <dimen
         name="expenses_storename_size">10pt</dimen>
     <dimen
@@ -18,5 +18,8 @@
         name="help_text_padding">20px</dimen>
     <dimen
         name="avatar_size">75px</dimen>
-    <dimen name="expense_button_size">12pt</dimen>
+    <dimen 
+        name="expense_button_size">12pt</dimen>
+    <dimen
+        name="amountsize">10pt</dimen>
 </resources>

@@ -2,17 +2,81 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    
+<LinearLayout
     android:id="@+id/fixedexpensesdialog"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/budgetbackgroud"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/income" />
+
+        <ProgressBar
+            android:id="@+id/progressBarIncome"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="162dp"
+            android:layout_height="12dp"
+           	android:layout_marginLeft="55dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/incomeprogressbar" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewIncomeProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/balance"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/Green"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fixed" />
+
+        <ProgressBar
+            android:id="@+id/progressBarFixedExpenses"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="162dp"
+            android:layout_height="12dp"
+            android:layout_marginLeft="10dp"            
+            android:progressDrawable="@drawable/incomeprogressbar" />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/textViewFixedProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/balance"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/Green"
+        android:textStyle="bold" />
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -26,38 +90,35 @@
         <Spinner
             android:id="@+id/Spinner_CategoryList"
             android:layout_width="fill_parent"
-            android:layout_height="45dp" />
+            android:layout_height="35dp" 
+            android:spinnerMode="dropdown" />
     </LinearLayout>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal" >
-
         <TextView
             android:id="@+id/TextView_StoreName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowColor="@android:color/black"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
+            android:gravity="center"
             android:text="@string/categoryName"
-            android:textColor="@color/menu_glow"
+            android:textColor="@color/Plum"
             android:textSize="@dimen/expenses_storename_size" />
 
         <EditText
             android:id="@+id/EditText_StoreName"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_weight="0.77"
-            android:gravity="right"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/rectanglebox"
             android:inputType="textPersonName"
-            android:maxLines="1" >
-
-            <requestFocus />
+            android:maxLines="1"
+            android:textColor="@color/Cyan" >
         </EditText>
     </LinearLayout>
 
@@ -66,28 +127,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
         <TextView
             android:id="@+id/TextView_Amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:shadowColor="@android:color/darker_gray"
-            android:shadowDx="0"
-            android:shadowDy="0"
             android:text="@string/amount"
-            android:textColor="@color/title_glow"
+            android:textColor="@color/MediumAquamarine"
             android:textSize="@dimen/expenses_storename_size" />
 
         <EditText
             android:id="@+id/EditText_Amount"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_weight="0.17"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/rectanglebox"
+            android:ems="10"
             android:gravity="right"
             android:inputType="numberDecimal"
-            android:maxLines="1" />
+            android:textColor="@color/article_title" >
+
+            <requestFocus />
+        </EditText>
 
     </LinearLayout>
 
@@ -95,13 +156,18 @@
         android:id="@+id/LinearLayout01"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/imageButton_ShoppingDate"
-            android:layout_width="85dp"
-            android:layout_height="60dp"
-            android:src="@drawable/calendar" />
+            android:layout_width="80dp"
+            android:layout_height="75dp"
+            android:background="@drawable/roundcorners"
+            android:contentDescription="Calendar"
+            android:cropToPadding="true"
+            android:src="@drawable/calendar"
+            android:textAlignment="viewEnd" />
 
         <TextView
             android:id="@+id/TextView_ShoppingDate"
@@ -116,7 +182,7 @@
         android:id="@+id/LinearLayout02"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="40dp"
         android:orientation="horizontal" >
 
         <Button
@@ -125,7 +191,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:gravity="left"
-            android:text="@string/btn_AddAnother" />
+            android:text="@string/btn_AddAnother"
+            android:textColor="@color/Blue"
+            android:textSize="20dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -133,8 +201,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
-        android:layout_marginTop="80dp"
-        android:layout_weight="0.07"
+        android:layout_marginTop="40dp"
+        android:layout_weight="0.01"
         android:orientation="horizontal" >
 
         <Button
@@ -145,6 +213,7 @@
             android:layout_marginLeft="25dp"
             android:minWidth="50dp"
             android:text="@string/save"
+            android:textColor="@color/Blue"
             android:textSize="@dimen/expense_button_size" />
 
         <Button
@@ -155,8 +224,9 @@
             android:layout_marginLeft="40dp"
             android:minWidth="50dp"
             android:text="@string/clear"
+            android:textColor="@color/Blue"
             android:textSize="@dimen/expense_button_size" />
     </LinearLayout>
-
 </LinearLayout>
+
 </ScrollView>

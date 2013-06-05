@@ -12,7 +12,7 @@ public class SplashActivity extends ActivityExt {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		startActivity(new Intent(SplashActivity.this, MainActivity.class));
-		
+		SplashActivity.this.finish();
 		//startAnimation();
 	}
 	

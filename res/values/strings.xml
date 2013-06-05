@@ -4,7 +4,13 @@
     <string 
         name="app_name">PersonalBudgeting</string>
     <string 
-        name="menu_settings">Settings</string>
+        name="menu_settings">SETTINGS</string>
+    <string 
+        name="menu_fixedexpenses">FIXED EXPENSE</string>
+    <string 
+        name="menu_variableexpenses">VARIABLE EXPENSE</string>
+    <string 
+        name="menu_reports">REPORTS</string>
     <string
         name="splash">Splash Screen</string>
     <string
@@ -98,21 +104,19 @@
     <string 
         name="no">NO</string>
     <string 
-        name="income">Income</string>
+        name="income">INCOME</string>
     <string 
         name="balance">Balance</string>
     <string 
-        name="monthlyincome">Monthly Income</string>
+        name="monthlyincome">MONTHLY INCOME</string>
     <string 
-        name="otherincome">Income from Other Sources</string>    
-    <string name="variable">VariableExpenses</string>
-    <string name="fixed">FixedExpenses</string>   
-    <string name="scores">Score Screen</string>   
-    <string name="all_scores">All Scores</string>      
-    <string name="friends_scores">Friends Score</string>
-        <string name="no_scores">No Score</string>
- 
-        <!-- Define Variables Categories Here -->
+        name="otherincome">INCOME OTHER SOURCES</string>    
+    <string 
+        name="variable">EXPENSE LIMIT</string>
+    <string 
+        name="fixed">EXPENSE LIMIT</string>   
+
+    <!-- Define Variables Categories Here -->
     
     <string name="grocery">GROCERY</string>
     <string name="utilities">UTILITIES</string>
@@ -127,7 +131,7 @@
     <string name="rentalinsurance">RENTAL INSURANCE</string>
     <string name="healthinsurance">HEALTH INSURANCE</string>
     <string name="lifeinsurance">LIFE INSURANCE</string>
-    <string name="carloan">CAR LOAD</string>
+    <string name="carloan">CAR LOAN</string>
     <string name="carinsurance">CAR INSURANCE</string>
     <string name="daycare">DAY CARE</string>
     <string name="fixedmisc">OTHERS</string>
@@ -137,4 +141,9 @@
     <string name="reportdate">DATE</string>
     <string name="reportcategory">CATEGORY</string>
     <string name="reportamt">AMOUNT</string>
+    
+    <!-- Repeat List -->
+    <string name="none">NONE</string>
+    <string name="monthly">MONTHLY</string>
+    <string name="currentdate">CurrentDate</string>
 </resources>

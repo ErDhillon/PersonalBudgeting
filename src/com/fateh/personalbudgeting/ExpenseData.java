@@ -1,12 +1,17 @@
 package com.fateh.personalbudgeting;
 
 import java.sql.Date;
-
+/***************
+ * Data Structure to store in DB for Report Generation
+ * @author administrator
+ *
+ */
 public class ExpenseData {
 
 	public String mCategory="";
 	public float mAmount;
 	public String mDate;
+	public String mMonth;
 	
 	public String GetCategory()
 	{
@@ -33,6 +38,15 @@ public class ExpenseData {
 	public void SetDate(String val)
 	{
 	  mDate = val;
+	}
+
+	public String GetMonth()
+	{
+	 return mMonth;
+	}
+	public void SetMonth(String val)
+	{
+	  mMonth = val;
 	}
 	
 }

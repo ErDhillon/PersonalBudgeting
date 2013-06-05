@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+     <LinearLayout
+         xmlns:android="http://schemas.android.com/apk/res/android"
+    	 android:id="@+id/incomelimitDialog"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_marginTop="60dp"
+         android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/textViewAccountIncome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/monthlyincome"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editTextSetIncome"
+                android:layout_width="102dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginLeft="60dp"
+                android:inputType="numberDecimal" >
+				
+                <requestFocus />
+            </EditText>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/textViewAccountIncomeOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/otherincome"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <EditText
+                android:id="@+id/editTextSetIncomeOther"
+                android:layout_width="102dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+        		
+	</LinearLayout>

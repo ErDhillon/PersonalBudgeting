@@ -30,6 +30,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+/***************
+ * Not Used
+ * @author administrator
+ *
+ */
 public class PersonalActivity extends ActivityExt {
 
 	SharedPreferences mGameSettings;

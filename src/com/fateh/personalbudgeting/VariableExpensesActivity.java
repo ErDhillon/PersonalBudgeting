@@ -1,14 +1,18 @@
 package com.fateh.personalbudgeting;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.fateh.personalbudgeting.R;
 
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -26,6 +30,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -35,12 +40,18 @@ import android.widget.Toast;
 public class VariableExpensesActivity extends ActivityExt {
 	SharedPreferences mBudgetSettings;
 	static final int DATE_DIALOG_ID = 0;
-	static float variableExpenses = 0;
+	static Float variableExpenses = 0.0f;
+	static Float variableExpenseProgress = 0.0f;
+	static Float actualIncome = 0.0f;
+	static Float actualVariableExpMaxLimit = 0.0f;	
+	
+	public static final String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+	static String monthName;
 	
 	DatabaseHelper db;
 	ExpenseData expData;
-	public static final String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
-	static String monthName;
+	public ArrayList<ExpenseData> outputFixedExpList = new ArrayList<ExpenseData>();
+	public ArrayList<ActualBudgetData> actualLimits  = new ArrayList<ActualBudgetData>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +64,55 @@ public class VariableExpensesActivity extends ActivityExt {
         initDatePicker();
         initSaveData();
         initAddAnother();
+        initClearData();
+        InitRetrieveActualBudgetData();
+        InitRetrieveVariableExpenseData();
+        InitSetControls();       
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		setContentView(R.layout.activity_variableexpenses);
-        // Retrieve the shared preferences
-		mBudgetSettings = getSharedPreferences(BUDGET, Context.MODE_PRIVATE);
-        initCategoryRetriever();
-        initDatePicker();
-        initSaveData();
-        initAddAnother();
-	};
+	private void InitSetControls() {
+		// TODO Auto-generated method stub
+		((ProgressBar)findViewById(R.id.progressBarIncome)).setMax(actualIncome.intValue());
+		((ProgressBar)findViewById(R.id.progressBarIncome)).setProgress(actualIncome.intValue()-variableExpenseProgress.intValue());
+
+		((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setMax(actualVariableExpMaxLimit.intValue());
+		((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setProgress( (actualVariableExpMaxLimit.intValue()-variableExpenseProgress.intValue()) );
+		
+		
+	}
+
+private void InitRetrieveActualBudgetData() {
+	// TODO Auto-generated method stub
+    db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 1);
+    db.getWritableDatabase();
+    final Calendar c = Calendar.getInstance();
+    int month = c.get(Calendar.MONTH);
+    String currentMonth = MONTHS[month];
+    actualLimits = db.getCurrentBudgetData(currentMonth);
+    
+    for(int i =0; i<actualLimits.size();i++)
+    {
+    	actualIncome += actualLimits.get(i).GetIncome();
+    	actualVariableExpMaxLimit += actualLimits.get(i).GetFixedActualExpense();
+    }
+}
+
+private void InitRetrieveVariableExpenseData() {
+		// TODO Auto-generated method stub
+    db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 1);
+    db.getWritableDatabase();
+    final Calendar c = Calendar.getInstance();
+    int month = c.get(Calendar.MONTH);
+    String currentMonth = MONTHS[month];
+    
+    outputFixedExpList.clear();
+    outputFixedExpList = db.getVariableExpenses(currentMonth);
+    for(int i =0; i<outputFixedExpList.size();i++)
+    	{
+    		variableExpenseProgress += outputFixedExpList.get(i).GetAmount();
+    	}
+	}
+
 	private void initCategoryRetriever() {
 		// TODO Auto-generated method stub
     // Populate Spinner control with genders
@@ -128,6 +175,7 @@ public class VariableExpensesActivity extends ActivityExt {
 									int dayOfMonth) {
 								Time shoppingDateTime = new Time();
 								shoppingDateTime.set(dayOfMonth, monthOfYear, year);
+								monthName = MONTHS[monthOfYear];
 								long dtDob = shoppingDateTime.toMillis(true);
 								shopdatetTV.setText(DateFormat.format("MMMM dd, yyyy", dtDob));
 								Editor editor = mBudgetSettings.edit();
@@ -170,7 +218,8 @@ public class VariableExpensesActivity extends ActivityExt {
     	}
     };
     
-    private void initSaveData()
+    @SuppressLint("NewApi")
+	private void initSaveData()
     {
     	Button saveBtn = (Button) findViewById(R.id.Button_Save);
     	saveBtn.setOnClickListener(new OnClickListener() {
@@ -180,22 +229,65 @@ public class VariableExpensesActivity extends ActivityExt {
 
 		    	//Get the Intenet
 		    	Intent data = getIntent();	
+				String category = null, amount = null, date = null;
+				
+		    	final EditText storeName = (EditText)findViewById(R.id.EditText_StoreName);
+		    	final EditText amountEditText = (EditText)findViewById(R.id.EditText_Amount);
+		    	final TextView dateTextView = (TextView)findViewById(R.id.TextView_ShoppingDate);
 		    	
-		    	EditText storeName = (EditText)findViewById(R.id.EditText_StoreName);
-		    	EditText amountEditText = (EditText)findViewById(R.id.EditText_Amount);
-		    	TextView dateTextView = (TextView)findViewById(R.id.TextView_ShoppingDate);
+		    	if(storeName.getText().toString().isEmpty() ||  amountEditText.getText().toString().isEmpty() || dateTextView.getText().toString().isEmpty())
+		    	{
+		    		   	  new AlertDialog.Builder(VariableExpensesActivity.this)
+		    		      .setMessage("Missing Value")
+		    		      .setTitle("Do you want to Enter missing Values")
+		    		      .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+						    	while(storeName.getText().toString().isEmpty()|| amountEditText.getText().toString().isEmpty() || dateTextView.getText().toString().isEmpty())
+							    	{
+						    		   new AlertDialog.Builder(VariableExpensesActivity.this)
+					    		      .setMessage("Missing Value")
+					    		      .setTitle("Please enter Missing Values")
+					    		      .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface arg0, int arg1) {
+											// TODO Auto-generated method stub
+										}
+					    		      });
+							    	}
+							}
+							})
+			    		    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									finish();
+								}
+							})
+						.show();
+		  				Toast.makeText(VariableExpensesActivity.this, "Data Not Saved", 2).show();  
+		    	}
+		    	else
+		    	{
 		    	variableExpenses += Float.valueOf(amountEditText.getText().toString());
 		    	
-		    	String category= storeName.getText().toString();
-		    	String amount = amountEditText.getText().toString();
-		    	String date = dateTextView.getText().toString();
-		    	
+		    	category= storeName.getText().toString();
+		    	amount = amountEditText.getText().toString();
+		    	date = dateTextView.getText().toString();
+
+		    	if(monthName == null)
+		    	{
+		    		Calendar cal = Calendar.getInstance();
+		    		int iDay = cal.get(Calendar.DAY_OF_MONTH);
+		    		int iMonth = cal.get(Calendar.MONTH);
+		    		int iYear = cal.get(Calendar.YEAR);
+		    		monthName = MONTHS[iMonth];
+		    	}		    	
 				//Saving lastRecord
-		    	SaveRecord(category, amount, date);
+				SaveRecord(category, amount, date, monthName);
 				Toast.makeText(VariableExpensesActivity.this, "Data Saved", 2).show();
 				data.putExtra(BUDGET_PREFERENCES_TOTAL_VARIABLE_EXPENSES, variableExpenses);
 				data.putExtra(BUDGET_PREFERENCES_SHOPPINGDATE_MONTH, monthName);
 				setResult(RESULT_OK, data);
+		    	}
 				finish();
 
 			}
@@ -216,6 +308,20 @@ public class VariableExpensesActivity extends ActivityExt {
     	editor.commit();
     }
     
+    private void initClearData()
+    {
+    	Button clear = (Button)findViewById(R.id.Button_Cancel);
+    	clear.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+		    	((EditText)findViewById(R.id.EditText_StoreName)).setText("");
+		    	((EditText)findViewById(R.id.EditText_Amount)).setText("");
+		    	Toast.makeText(VariableExpensesActivity.this, "Data not Saved", Toast.LENGTH_SHORT).show();
+			}
+		});
+    }
     
     private void initAddAnother(){
         
@@ -234,8 +340,9 @@ public class VariableExpensesActivity extends ActivityExt {
 		    	String amount = amountEditText.getText().toString();
 		    	String date = dateTextView.getText().toString();
 		    	
-		    	SaveRecord(category, amount, date);
-		    	
+				//Saving lastRecord
+				SaveRecord(category, amount, date, monthName);
+		    	Toast.makeText(VariableExpensesActivity.this, "Data Saved. Please Add Another Expense", Toast.LENGTH_SHORT).show();
 		    	((EditText)findViewById(R.id.EditText_StoreName)).setText("");
 		    	((EditText)findViewById(R.id.EditText_Amount)).setText("");
 
@@ -243,7 +350,7 @@ public class VariableExpensesActivity extends ActivityExt {
 		});
     }
     
-	private void SaveRecord(String store, String amount, String date) {
+	private void SaveRecord(String store, String amount, String date, String monthStr) {
 		// TODO Auto-generated method stub
 
 		db = new DatabaseHelper(getApplicationContext(), "name", null, 35);
@@ -253,6 +360,7 @@ public class VariableExpensesActivity extends ActivityExt {
 		expData.mAmount = Float.parseFloat(amount);
 		expData.mCategory = store;
 		expData.mDate = date;
+		expData.mMonth = monthStr;
 		db.AddVariableExpenseRecord(expData);	
 	}
 }

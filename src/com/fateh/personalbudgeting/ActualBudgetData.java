@@ -2,15 +2,18 @@ package com.fateh.personalbudgeting;
 
 import java.sql.Date;
 
-public class BudgetData {
+/********************
+ * Data structure to store information in DB
+ * @author administrator
+ *
+ */
+public class ActualBudgetData {
 
 	public String mMonth;
 	public Float mIncome;
 	public Float mActualFixedExpenses;
 	public Float mActualVariableExpenses;
-	public Float mFixedExpProgress;
-	public Float mVariableExpProgess;
-	public Float mIncomeProgress;
+	public Boolean mIsRepeat;
 	
 	public Float GetIncome()
 	{
@@ -47,32 +50,14 @@ public class BudgetData {
 	{
 	  mMonth = val;
 	}
-	
-	public Float GetFixedExpProgress()
-	{
-	 return mFixedExpProgress ;
-	}
-	public void SetFixedExpProgress(Float val)
-	{
-	  mFixedExpProgress = val;
-	}
 
-	public Float GetVarExpProgress()
+	public Boolean GetIsRepeat()
 	{
-	 return mVariableExpProgess ;
+	 return mIsRepeat;
 	}
-	public void SetVarExpProgress(Float val)
+	public void SetIsRepeat(Boolean val)
 	{
-	  mVariableExpProgess = val;
+	  mIsRepeat = val;
 	}
-	
-	public Float GetIncomeProgress()
-	{
-	 return mIncomeProgress ;
-	}
-	public void SetIncomeProgress(Float val)
-	{
-	  mIncomeProgress = val;
-	}	
 	
 }

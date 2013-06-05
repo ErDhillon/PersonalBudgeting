@@ -1,59 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
+ <ScrollView 
+     xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/scrollView1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content">
+
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="462dp" >
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	        <ImageButton
+	            android:id="@+id/imageButtonpPrevMonth"
+	            android:layout_width="50dp"
+	            android:layout_height="36dp"
+	            android:layout_marginLeft="70dp"
+	            android:background="@drawable/roundcorners"
+	            android:cropToPadding="true"
+	            android:src="@drawable/previous" />
+	        <TextView
+	            android:id="@+id/textViewCurrentDate"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/currentdate"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	        <ImageButton
+	            android:id="@+id/ImageButtonNextMonth"
+	            android:layout_width="50dp"
+	            android:layout_height="36dp"
+	            android:background="@drawable/roundcorners"
+	            android:cropToPadding="true"
+	            android:src="@drawable/right" />
+	    </LinearLayout>
+
+	    <LinearLayout
+	        android:id="@+id/linearLayout4"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="40dp" >
+	        <ImageView
+	            android:id="@+id/imageView1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/divider2" />
+	    </LinearLayout>
+
+	    <LinearLayout
+	     	android:id="@+id/linearLayout1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="50dp"
+	        android:orientation="vertical" >
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal" >
+	            <ImageButton
+	                android:id="@+id/imageButtonIncome"
+	                android:layout_width="85dp"
+	                android:layout_height="65dp"
+	                android:background="@drawable/roundcorners"
+	                android:src="@drawable/monthlyincome" />
+
+	            <TextView
+	                android:id="@+id/textViewincomebanner"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="20dp"
+	                android:layoutDirection="inherit"
+	                android:text="@string/monthlyincome"
+	                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	            <TextView
+	                android:id="@+id/textViewmonthlyIncome"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="20dp"
+	                android:layoutDirection="inherit"
+	                android:layout_marginLeft="60dp"
+	                android:textColor="@color/White"
+	                android:background="@drawable/rectanglebox"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+	        </LinearLayout>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/accountDialog"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/budgetbackgroud">
-        <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="29dp"
-        android:orientation="horizontal" >
-    <TextView
-        android:id="@+id/TextViewAccountIncome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/help_text_size"
-        android:textStyle="bold"
-        android:text="@string/monthlyincome"></TextView>
-
-    <EditText
-        android:id="@+id/EditTextAccountIncome"
-        android:layout_width="146dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:maxLength="20"
-        android:maxLines="1" >
-</EditText>
-    </LinearLayout>
-        <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="29dp"
-        android:orientation="horizontal" >
-    <TextView
-        android:id="@+id/TextViewAccountIncomeOther"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/help_text_size"
-        android:textStyle="bold"
-        android:text="@string/otherincome"></TextView>
-
-        <EditText
-            android:id="@+id/EditTextAccountIncomeOther"
-            android:layout_width="91dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:maxLength="20"
-            android:maxLines="1" >
-</EditText>
-        </LinearLayout>
+            android:orientation="horizontal" >
+ 		</LinearLayout>	        
+	    </LinearLayout>
+
+	    <LinearLayout
+	     	android:id="@+id/linearLayout2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="180dp"
+	        android:orientation="vertical" >
+<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+ 		</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:layout_marginTop="20dp">
+
+    <ImageButton
+        android:id="@+id/imageButtonVariableExpenses"
+        android:layout_width="85dp"
+        android:layout_height="65dp"
+        android:background="@drawable/roundcorners"
+        android:src="@drawable/variableexpense" />
+
+    <TextView
+        android:id="@+id/textViewvariableexpbanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layoutDirection="inherit"
+        android:text="@string/variable"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textViewVariableLimit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/rectanglebox"
+        android:layoutDirection="inherit"
+
+        android:textColor="@color/white"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </LinearLayout>
+	    
+	</LinearLayout>
+	
+	    <LinearLayout
+	     	android:id="@+id/linearLayout3"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="300dp"
+	        android:orientation="vertical" >
+<Spinner
+            android:id="@+id/Spinner_Repeat"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+             
+            android:spinnerMode="dropdown" />   
+	</LinearLayout>
+
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/linearLayout1"
+	        android:layout_marginTop="10dp"
+	        android:orientation="horizontal" >
+
+	        <ImageButton
+	            android:id="@+id/imageButtonFixedExpenses"
+	            android:layout_width="90dp"
+	            android:layout_height="65dp"
+	            android:background="@drawable/roundcorners"
+	            android:src="@drawable/fixedexpense" />
+
+	        <TextView
+	            android:id="@+id/textViewfixedexpbanner"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="20dp"
+	            android:layoutDirection="inherit"
+	            android:text="@string/fixed"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	        <TextView
+	            android:id="@+id/textViewFixedLimit"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="20dp"
+	            android:layout_marginLeft="40dp"
+	            android:layoutDirection="inherit"
+	            android:textColor="@color/white"
+	            android:background="@drawable/rectanglebox"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	    </LinearLayout>
+
+	    <Button
+	        android:id="@+id/buttonSavetoDB"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginBottom="26dp"
+	        android:layout_marginLeft="39dp"
+	        android:text="SAVE" />
+
+	</RelativeLayout>
+
+</ScrollView> 
