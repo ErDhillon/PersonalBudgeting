@@ -17,16 +17,20 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="@string/variable"
-                     android:textAppearance="?android:attr/textAppearanceMedium" />
+		             android:textSize="@dimen/help_text_size"
+		             android:textStyle="bold"    
+		             android:textColor="@color/Blue"                 
+		             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                  <EditText
                      android:id="@+id/editTextSetVariableExpenseLimit"
-                     android:layout_width="68dp"
+                     android:layout_width="80dp"
                      android:layout_height="wrap_content"
                      android:layout_marginLeft="40dp"
                      android:ems="10"
+                     android:background="@drawable/rectanglebox"
                      android:inputType="numberDecimal" >
-
+					 
                      <requestFocus />
                  </EditText>
              </LinearLayout>

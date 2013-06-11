@@ -7,6 +7,7 @@ import com.fateh.personalbudgeting.R;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -18,8 +19,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.text.format.DateFormat;
 import android.text.format.Time;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,9 +30,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 /**************
  * Used to add, save and report Fixed Expenses
@@ -40,14 +45,20 @@ import android.widget.Toast;
 public class FixedExpensesActivity extends ActivityExt {
 	SharedPreferences mBudgetSettings;
 	static final int DATE_DIALOG_ID = 0;
+	static final int REPEAT_OPTION_ID = 1;
+	
 	static Float fixedExpenses = 0.0f;
-	static Float fixedExpenseProgress = 0.0f;
+	static Float fixedExpensefromTable = 0.0f;
 	static Float actualIncome = 0.0f;
 	static Float actualFixedExpMaxLimit = 0.0f;
 	
 	public static final String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"};
 	static String monthName;
-	
+	static String repeatOption = "none";
+    int day = 0;
+	int month = 0 ;
+    int year = 0;
+    
 	DatabaseHelper db;
 	ExpenseData expData;
 	public ArrayList<ExpenseData> outputFixedExpList = new ArrayList<ExpenseData>();
@@ -66,52 +77,119 @@ public class FixedExpensesActivity extends ActivityExt {
         initSaveData();
         initAddAnother();
         initClearData();
-        InitRetrieveActualBudgetData();
-        InitRetrieveFixedExpenseData();
-        InitSetControls();
+        initCurrentCalendarDate();
+        InitRetrieveActualBudgetData(month);
+        InitRetrieveFixedExpenseData(month);        
+        InitSetControls();    
+        InitDateForButtons();     
+        initSetRepeatOption();
 	}
-	
-private void InitSetControls() {
+
+private void initSetRepeatOption() {
 		// TODO Auto-generated method stub
-		((ProgressBar)findViewById(R.id.progressBarIncome)).setMax(actualIncome.intValue());
-		((ProgressBar)findViewById(R.id.progressBarIncome)).setProgress(actualIncome.intValue()-fixedExpenseProgress.intValue());
+		((Button)findViewById(R.id.Button_Repeat)).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showDialog(REPEAT_OPTION_ID);
+				((TextView)findViewById(R.id.TextView_RepeatOption)).setText(repeatOption);
 
-		((ProgressBar)findViewById(R.id.progressBarFixedExpenses)).setMax(actualFixedExpMaxLimit.intValue());
-		((ProgressBar)findViewById(R.id.progressBarFixedExpenses)).setProgress( (actualFixedExpMaxLimit.intValue()-fixedExpenseProgress.intValue()) );
-		
-		
+			}
+		});
 	}
 
-private void InitRetrieveActualBudgetData() {
+private void initCurrentCalendarDate() {
+		// TODO Auto-generated method stub
+    final Calendar c = Calendar.getInstance();
+    month = c.get(Calendar.MONTH);
+    year = c.get(Calendar.YEAR);
+	}
+
+@Override
+protected void onDestroy() {
+	super.onDestroy();
+	fixedExpenses = 0.0f;
+	fixedExpensefromTable = 0.0f;
+	actualIncome = 0.0f;
+	actualFixedExpMaxLimit = 0.0f;
+}
+
+	private void InitSetControls() {
+		// TODO Auto-generated method stub
+		//Current Date
+		Calendar cal = Calendar.getInstance();
+		day = cal.get(Calendar.DAY_OF_MONTH);
+		month = cal.get(Calendar.MONTH);
+		year = cal.get(Calendar.YEAR);
+		Time shoppingDate = new Time();
+		shoppingDate.set(day,month, year);
+		long dtShopping = shoppingDate.toMillis(true);
+		((TextView)findViewById(R.id.TextView_ShoppingDate)).setText(DateFormat.format("MMMM dd, yyyy", dtShopping));
+		Editor editor = mBudgetSettings.edit();
+		editor.putLong(BUDGET_PREFERENCES_SHOPPINGDATE, dtShopping);
+		editor.commit();		
+	}
+
+	private void InitRetrieveActualBudgetData(int month) {
 	// TODO Auto-generated method stub
+    actualIncome = 0.0f;
+    actualFixedExpMaxLimit = 0.0f;	
     db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 1);
     db.getWritableDatabase();
-    final Calendar c = Calendar.getInstance();
-    int month = c.get(Calendar.MONTH);
     String currentMonth = MONTHS[month];
     actualLimits = db.getCurrentBudgetData(currentMonth);
-    
-    for(int i =0; i<actualLimits.size();i++)
+    if (actualLimits.size() != 0)
     {
-    	actualIncome += actualLimits.get(i).GetIncome();
-    	actualFixedExpMaxLimit += actualLimits.get(i).GetFixedActualExpense();
+	    for(int i =0; i<actualLimits.size();i++)
+	    {
+	    	actualIncome = actualLimits.get(i).GetIncome();
+	    	actualFixedExpMaxLimit = actualLimits.get(i).GetFixedActualExpense();
+	    }
+    }
+    else
+    {
+    	actualIncome = 0.0f;
+    	actualFixedExpMaxLimit = 0.0f;
+    	fixedExpensefromTable=0.0f;
     }
 }
 
-private void InitRetrieveFixedExpenseData() {
+	private void InitRetrieveFixedExpenseData(int month) {
 		// TODO Auto-generated method stub
-    db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 1);
+    fixedExpensefromTable=0.0f;
+	db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 1);
     db.getWritableDatabase();
-    final Calendar c = Calendar.getInstance();
-    int month = c.get(Calendar.MONTH);
     String currentMonth = MONTHS[month];
     
     outputFixedExpList.clear();
     outputFixedExpList = db.getFixedExpenses(currentMonth);
-    for(int i =0; i<outputFixedExpList.size();i++)
-    	{
-    		fixedExpenseProgress += outputFixedExpList.get(i).GetAmount();
-    	}
+    
+    if(outputFixedExpList.size() != 0)
+    {
+	    for(int i = 0; i<outputFixedExpList.size();i++)
+	    {
+	    	fixedExpensefromTable += outputFixedExpList.get(i).GetAmount();
+	    }
+    }
+    else
+    {
+    	fixedExpensefromTable = 0.0f;
+    }
+	((ProgressBar)findViewById(R.id.progressBarIncome)).setMax(actualIncome.intValue());
+	((ProgressBar)findViewById(R.id.progressBarIncome)).setProgress(actualIncome.intValue()-fixedExpensefromTable.intValue());
+
+	((ProgressBar)findViewById(R.id.progressBarFixedExpenses)).setMax(actualFixedExpMaxLimit.intValue());
+	((ProgressBar)findViewById(R.id.progressBarFixedExpenses)).setProgress( (actualFixedExpMaxLimit.intValue()-fixedExpensefromTable.intValue()) );
+	
+	//Display Actual Monthly Income and Monthly Fixed Expense
+	((TextView)findViewById(R.id.textViewActualIncome)).setText("$"+actualIncome);
+	((TextView)findViewById(R.id.textViewActualFixedExpenses)).setText("$"+actualFixedExpMaxLimit);
+	
+	//Display Balance for the Month
+	((TextView)findViewById(R.id.textViewIncomeProgress)).setText("Remaining $"+(actualIncome-fixedExpensefromTable));
+	((TextView)findViewById(R.id.textViewFixedProgress)).setText("Remaining $"+(actualFixedExpMaxLimit-fixedExpensefromTable));
+
 	}
 
 	private void initCategoryRetriever() {
@@ -165,11 +243,15 @@ private void InitRetrieveFixedExpenseData() {
 	
 	@Override
     protected Dialog onCreateDialog(int id) {
-    	DatePickerDialog  dateDialog = null;
-    	switch (id) {
+    	Dialog  dialog = null;
+    	LayoutInflater inflator;
+    	AlertDialog.Builder builder = null;
+    	AlertDialog passwordDialog = null;
+    	View layout = null;
+		switch (id) {
 		case DATE_DIALOG_ID:
 			final TextView shoppingDateTextView = (TextView) findViewById(R.id.TextView_ShoppingDate);
-			dateDialog = 
+			dialog = 
 				new DatePickerDialog(this,
 						new DatePickerDialog.OnDateSetListener() {
 							public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -184,8 +266,31 @@ private void InitRetrieveFixedExpenseData() {
 								editor.commit();
 							}
 						},0,0,0);
+			break;
+		case REPEAT_OPTION_ID:
+			inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			layout = inflator.inflate(R.layout.categories_list, (ViewGroup)findViewById(R.id.radio_groupDialog));	
+			final RadioGroup radgrp = (RadioGroup)layout.findViewById(R.id.radio_groupDialog); 
+			
+			builder = new AlertDialog.Builder(this);
+			builder.setView(layout);
+			builder.setTitle(R.string.settings_Shoping);
+			FixedExpensesActivity.this.removeDialog(REPEAT_OPTION_ID);
+			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					int radioButtonID = radgrp.getCheckedRadioButtonId();
+					RadioButton radioButton = (RadioButton) radgrp.findViewById(radioButtonID);
+					repeatOption = radioButton.getText().toString();
+					((TextView) findViewById(R.id.TextView_RepeatOption)).setText(radioButton.getText().toString());
+					FixedExpensesActivity.this.removeDialog(REPEAT_OPTION_ID);
+				}
+				});
+			dialog = builder.create();	
     	}
-		return dateDialog;
+		return dialog;
 	}
 	
 	
@@ -195,29 +300,64 @@ private void InitRetrieveFixedExpenseData() {
     	switch(id){
     	case DATE_DIALOG_ID:
     		DatePickerDialog dateDialog = (DatePickerDialog)(dialog);
-    		int iDay, iMonth, iYear;
     		
     		if(mBudgetSettings.contains(BUDGET_PREFERENCES_SHOPPINGDATE))
     		{
     			long shoppingDate = mBudgetSettings.getLong(BUDGET_PREFERENCES_SHOPPINGDATE, 0);
     			Time shopDateTime = new Time();
     			shopDateTime.set(shoppingDate);
-    			iDay = shopDateTime.monthDay;
-    			iMonth = shopDateTime.month;
-    			iYear = shopDateTime.year;
+    			day = shopDateTime.monthDay;
+    			month = shopDateTime.month;
+    			year = shopDateTime.year;
     		}
     		else
     		{
     		Calendar cal = Calendar.getInstance();
-    		iDay = cal.get(Calendar.DAY_OF_MONTH);
-    		iMonth = cal.get(Calendar.MONTH);
-    		iYear = cal.get(Calendar.YEAR);
+    		day = cal.get(Calendar.DAY_OF_MONTH);
+    		month = cal.get(Calendar.MONTH);
+    		year = cal.get(Calendar.YEAR);
     		}
-    		monthName = MONTHS[iMonth];
-    		dateDialog.updateDate(iYear, iMonth, iDay);
+    		monthName = MONTHS[month];
+    		dateDialog.updateDate(year, month, day);
     		return;
     	}
     };
+    
+	/*************
+	 * Date Previous and Next Buttons
+	 */
+	private void InitDateForButtons() {
+		// TODO Auto-generated method stub
+	    monthName = MONTHS[month];
+	    ((TextView)findViewById(R.id.textViewCurrentDate)).setText(monthName+" "+year);
+	    ImageButton prev = (ImageButton)findViewById(R.id.imageButtonpPrevMonth);
+	    ImageButton next = (ImageButton)findViewById(R.id.ImageButtonNextMonth);
+	    
+	    prev.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				month = month-1;
+			    monthName = MONTHS[month];
+			    ((TextView)findViewById(R.id.textViewCurrentDate)).setText(monthName+" "+year);
+			    InitRetrieveActualBudgetData(month);
+			    InitRetrieveFixedExpenseData(month);
+			}
+		});
+	    next.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				month = month+1;
+			    monthName = MONTHS[month];
+			    ((TextView)findViewById(R.id.textViewCurrentDate)).setText(monthName+" "+year);
+			    InitRetrieveActualBudgetData(month);
+			    InitRetrieveFixedExpenseData(month);
+			}
+		});
+	}
     
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	private void initSaveData()
@@ -238,32 +378,14 @@ private void InitRetrieveFixedExpenseData() {
 		    	if(storeName.getText().toString().isEmpty() ||  amountEditText.getText().toString().isEmpty() || dateTextView.getText().toString().isEmpty())
 		    	{
 		    		   	  new AlertDialog.Builder(FixedExpensesActivity.this)
-		    		      .setMessage("Missing Value")
-		    		      .setTitle("Do you want to Enter missing Values")
-		    		      .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		    		      .setTitle("Missing Value")
+		    		      .setMessage("Please enter missing Values !!!")
+		    		      .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
-						    	while(storeName.getText().toString().isEmpty()|| amountEditText.getText().toString().isEmpty() || dateTextView.getText().toString().isEmpty())
-							    	{
-						    		   new AlertDialog.Builder(FixedExpensesActivity.this)
-					    		      .setMessage("Missing Value")
-					    		      .setTitle("Please enter Missing Values")
-					    		      .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-										public void onClick(DialogInterface arg0, int arg1) {
-											// TODO Auto-generated method stub
-										}
-					    		      });
-							    	}
 							}
 							})
-			    		    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int which) {
-									// TODO Auto-generated method stub
-									finish();
-								}
-							})
 						.show();
-		  				Toast.makeText(FixedExpensesActivity.this, "Data Not Saved", 2).show();  
 		    	}
 		    	else
 		    	{
@@ -280,14 +402,12 @@ private void InitRetrieveFixedExpenseData() {
 		    		monthName = MONTHS[iMonth];
 		    	}
 				//Saving lastRecord
-				SaveRecord(category, amount, date, monthName);
+				SaveRecord(category, amount, date, monthName, day, year);
 		    	
 				Toast.makeText(FixedExpensesActivity.this, "Data Saved", 2).show();
-				data.putExtra(BUDGET_PREFERENCES_TOTAL_FIXED_EXPENSES, fixedExpenses);
-				data.putExtra(BUDGET_PREFERENCES_SHOPPINGDATE_MONTH, monthName);
-				setResult(RESULT_OK, data);
-		    	}
 				finish();
+		    	}
+				
 			}
 		});
     	
@@ -316,7 +436,6 @@ private void InitRetrieveFixedExpenseData() {
 				// TODO Auto-generated method stub
 		    	((EditText)findViewById(R.id.EditText_StoreName)).setText("");
 		    	((EditText)findViewById(R.id.EditText_Amount)).setText("");
-		    	Toast.makeText(FixedExpensesActivity.this, "Data not Saved", Toast.LENGTH_SHORT).show();
 			}
 		});
     }
@@ -325,29 +444,48 @@ private void InitRetrieveFixedExpenseData() {
     	Button yesAnother = (Button)findViewById(R.id.Button_AddAnother);
     	yesAnother.setOnClickListener(new OnClickListener() {
 			
+			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Spinner s = (Spinner) findViewById(R.id.Spinner_CategoryList);
-				
 		    	EditText storeName = (EditText)findViewById(R.id.EditText_StoreName);
 		    	EditText amountEditText = (EditText)findViewById(R.id.EditText_Amount);
 		    	TextView dateTextView = (TextView)findViewById(R.id.TextView_ShoppingDate);
+
+			    if(amountEditText.getText().toString().isEmpty() || storeName.getText().toString().isEmpty() ) {
+			        //Ask the user if they want to quit
+			        new AlertDialog.Builder(FixedExpensesActivity.this)
+			        .setIcon(android.R.drawable.ic_dialog_alert)
+			        .setTitle("Missing Values")
+			        .setMessage("Please Enter the Missing Values !")
+			        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int which) {
+			                //Stop the activity
+			                //finish();    
+			            }
+			        })
+			        .show();
+			    }
+			    
+			    else {
 		    	fixedExpenses += Float.valueOf(amountEditText.getText().toString());
 		    	String category= storeName.getText().toString();
 		    	String amount = amountEditText.getText().toString();
 		    	String date = dateTextView.getText().toString();
 		    	
-		    	SaveRecord(category, amount, date, monthName);
+		    	SaveRecord(category, amount, date, monthName, day, year);
+		    	
 		    	Toast.makeText(FixedExpensesActivity.this, "Data Saved.Please Add Another Expense", Toast.LENGTH_SHORT).show();
 		    	
 		    	((EditText)findViewById(R.id.EditText_StoreName)).setText("");
 		    	((EditText)findViewById(R.id.EditText_Amount)).setText("");
+			    }
 			}
 		});
     }
 
-    private void SaveRecord(String store, String amount, String date, String monthStr) {
+    private void SaveRecord(String store, String amount, String date, String monthStr, int day, int year) {
 		// TODO Auto-generated method stub
 
 		db = new DatabaseHelper(getApplicationContext(), "name", null, 1);
@@ -358,7 +496,7 @@ private void InitRetrieveFixedExpenseData() {
 		expData.mCategory = store;
 		expData.mDate = date;
 		expData.mMonth = monthStr;
-		db.AddFixedExpenseRecord(expData);	
+		db.AddFixedExpenseRecord(expData, repeatOption, day, year);	
 	}
 		
 }

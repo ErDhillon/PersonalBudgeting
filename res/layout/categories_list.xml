@@ -5,39 +5,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" > -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-        android:id="@+id/categoryList"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
+<RadioGroup 
+    	xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:id="@+id/radio_groupDialog"
+    	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <RadioButton
-        android:id="@+id/radioButtonGrocery"
+        android:id="@+id/radioButtonNone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/grocery" />
+        android:text="@string/none" />
 
     <RadioButton
-        android:id="@+id/radioButtonGas"
+        android:id="@+id/radioButtonMonthly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/gas" />
-
-    <RadioButton
-        android:id="@+id/radioButtonDinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/diningout" />
-
-    <RadioButton
-        android:id="@+id/radioButtonMedical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/medical" />
-
-    <RadioButton
-        android:id="@+id/radioButtonMisc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/misc" />
-    </LinearLayout>
+        android:text="@string/monthly" />
+ </RadioGroup>   

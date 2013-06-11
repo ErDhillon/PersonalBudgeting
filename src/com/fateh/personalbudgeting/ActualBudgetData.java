@@ -13,7 +13,7 @@ public class ActualBudgetData {
 	public Float mIncome;
 	public Float mActualFixedExpenses;
 	public Float mActualVariableExpenses;
-	public Boolean mIsRepeat;
+	public String mRepeatOption;
 	
 	public Float GetIncome()
 	{
@@ -51,13 +51,13 @@ public class ActualBudgetData {
 	  mMonth = val;
 	}
 
-	public Boolean GetIsRepeat()
+	public String GetIsRepeat()
 	{
-	 return mIsRepeat;
+	 return mRepeatOption;
 	}
-	public void SetIsRepeat(Boolean val)
+	public void SetIsRepeat(String val)
 	{
-	  mIsRepeat = val;
+	  mRepeatOption = val;
 	}
 	
 }

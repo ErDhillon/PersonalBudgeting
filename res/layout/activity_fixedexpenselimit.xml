@@ -17,14 +17,17 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="@string/fixed"
+		             android:textSize="@dimen/help_text_size"
+		             android:textStyle="bold"    
+		             android:textColor="@color/Blue"                    
                   android:textAppearance="?android:attr/textAppearanceMedium" />
 
               <EditText
                   android:id="@+id/editTextSetFixedExpenseLimit"
-                  android:layout_width="102dp"
+                  android:layout_width="80dp"
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="60dp"
-                  android:layout_weight="1"
+                  android:background="@drawable/rectanglebox"
                   android:ems="10"
                   android:inputType="numberDecimal" >
 

@@ -46,7 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private ArrayList<ExpenseData> expenses = new ArrayList<ExpenseData>();
 	private ArrayList<ActualBudgetData> actualexpenses = new ArrayList<ActualBudgetData>();
 	
-	
+	public static final String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"};
+	static String monthName;
+
 	public DatabaseHelper(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, DATABASENAME, null, 1);
@@ -99,15 +101,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
-	public void AddFixedExpenseRecord(ExpenseData expdata)
+	public void AddFixedExpenseRecord(ExpenseData expdata, String repeatOption, int day, int year)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(COLUMN_CATEGORY_NAME,expdata.mCategory);
 		contentValues.put(COLUMN_AMOUNT, expdata.mAmount);
-		contentValues.put(COLUMN_DATE, expdata.mDate);
-		contentValues.put(COLUMN_MONTH, expdata.mMonth);
-		db.insert(FIXEDEXPTABLE, null, contentValues);
+		if(repeatOption.equals("MONTHLY"))
+		{
+			for(int i=0; i<12;i++)
+			{
+				expdata.mMonth = MONTHS[i];
+				expdata.mDate = expdata.mMonth+""+day+","+year;
+				contentValues.put(COLUMN_DATE, expdata.mDate);
+				contentValues.put(COLUMN_MONTH, expdata.mMonth);
+				db.insert(FIXEDEXPTABLE, null, contentValues);
+			}
+		}
+		else
+		{
+			contentValues.put(COLUMN_DATE, expdata.mDate);
+			contentValues.put(COLUMN_MONTH, expdata.mMonth);
+			db.insert(FIXEDEXPTABLE, null, contentValues);
+		}
+			
 		db.close();
 	}
 
@@ -118,8 +135,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		contentValues.put(COLUMN_CATEGORY_NAME,expdata.mCategory);
 		contentValues.put(COLUMN_AMOUNT, expdata.mAmount);
 		contentValues.put(COLUMN_DATE, expdata.mDate);
-		contentValues.put(COLUMN_MONTH, expdata.mMonth);		
+		contentValues.put(COLUMN_MONTH, expdata.mMonth);
 		db.insert(VARIABLEEXPTABLE, null, contentValues);
+
+//		if(repeatOption.equals("MONTHLY"))
+//		{
+//			for(int i=0; i<12;i++)
+//			{
+//				expdata.mMonth = MONTHS[i];
+//				contentValues.put(COLUMN_MONTH, expdata.mMonth);
+//				db.insert(VARIABLEEXPTABLE, null, contentValues);
+//			}
+//		}
+//		else
+//		{
+//			contentValues.put(COLUMN_MONTH, expdata.mMonth);
+//		}
+
 		db.close();
 	}
 	
@@ -132,20 +164,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
-
+		Cursor cursor = null;
 		contentValues.put(COLUMN_BUDGET_INCOME, bdata.mIncome);
 		contentValues.put(COLUMN_BUDGET_ACTUALFIXED, bdata.mActualFixedExpenses);
 		contentValues.put(COLUMN_BUDGET_ACTUALVARIABLE, bdata.mActualVariableExpenses);
-		
-		Cursor cursor = db.rawQuery("select * from "+ BUDGETDATATABLE +" Where "+COLUMN_BUDGET_MONTH + "=?", new String[]{bdata.mMonth});
-		if(cursor.getCount() != 0)
+		if(bdata.mRepeatOption.equals("MONTHLY"))
 		{
-			db.update(BUDGETDATATABLE, contentValues, COLUMN_BUDGET_MONTH +" =? " , new String[]{bdata.mMonth});
+			for(int i=0; i<12;i++)
+			{
+				bdata.mMonth = MONTHS[i];
+				cursor = db.rawQuery("select * from "+ BUDGETDATATABLE +" Where "+COLUMN_BUDGET_MONTH + "=?", new String[]{bdata.mMonth});
+				if(cursor.getCount() != 0)
+				{
+					db.update(BUDGETDATATABLE, contentValues, COLUMN_BUDGET_MONTH +" =? " , new String[]{bdata.mMonth});
+				}
+				else
+				{
+					contentValues.put(COLUMN_BUDGET_MONTH, bdata.mMonth);
+					db.insert(BUDGETDATATABLE, null, contentValues);
+				}
+			}
 		}
 		else
 		{
-			contentValues.put(COLUMN_BUDGET_MONTH, bdata.mMonth);
-			db.insert(BUDGETDATATABLE, null, contentValues);
+			cursor = db.rawQuery("select * from "+ BUDGETDATATABLE +" Where "+COLUMN_BUDGET_MONTH + "=?", new String[]{bdata.mMonth});
+			if(cursor.getCount() != 0)
+			{
+				db.update(BUDGETDATATABLE, contentValues, COLUMN_BUDGET_MONTH +" =? " , new String[]{bdata.mMonth});
+			}
+			else
+			{
+				contentValues.put(COLUMN_BUDGET_MONTH, bdata.mMonth);
+				db.insert(BUDGETDATATABLE, null, contentValues);
+			}
 		}
 		db.close();
 	}

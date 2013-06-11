@@ -86,11 +86,11 @@
     <string 
         name="btn_categories">CATEGORIES</string>
     <string 
-        name="btn_AddAnother">ADD ANOTHER ITEM</string>
+        name="btn_AddAnother">ADD MORE</string>
     <string 
-        name="categoryName">Name</string>
+        name="categoryName">NAME</string>
     <string 
-        name="amount">Amount</string>
+        name="amount">AMOUNT</string>
     <string 
         name="settings_button_shopping_date">Shopping Date</string>
     <string 
@@ -99,6 +99,8 @@
         name="clear">CLEAR</string>
     <string 
         name="addAnother">Add Another</string>
+    <string
+        name="repeat">REPEAT</string>
     <string 
         name="yes">YES</string>
     <string 
@@ -106,16 +108,18 @@
     <string 
         name="income">INCOME</string>
     <string 
-        name="balance">Balance</string>
+        name="balance">Remaining $</string>
     <string 
         name="monthlyincome">MONTHLY INCOME</string>
     <string 
         name="otherincome">INCOME OTHER SOURCES</string>    
     <string 
-        name="variable">EXPENSE LIMIT</string>
+        name="variable">VARIABLE LIMIT</string>
     <string 
-        name="fixed">EXPENSE LIMIT</string>   
+        name="fixed">FIXED LIMIT</string>   
 
+    <string
+        name="currency">$</string>
     <!-- Define Variables Categories Here -->
     
     <string name="grocery">GROCERY</string>
