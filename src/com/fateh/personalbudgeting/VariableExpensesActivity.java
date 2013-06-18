@@ -45,19 +45,31 @@ public class VariableExpensesActivity extends ActivityExt {
 	static Float variableExpenses = 0.0f;
 	static Float variableExpenseFromTable= 0.0f;
 	static Float actualIncome = 0.0f;
-	static Float actualVariableExpMaxLimit = 0.0f;	
+	static Float actualVariableExpMaxLimit = 0.0f;
+	static Float actualSaving = 0.0f;
+	
+	//Progress Monthly
+	static Float monthlyIncomeProgress = 0.0f;
+	static Float monthlyFixedExpenseProgress = 0.0f;
+	static Float monthlyVariableExpenseProgress = 0.0f;
+	static Float monthlySavingProgress = 0.0f;
+	static Float monthlyOverdrawnAmount = 0.0f;
 	
 	public static final String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"};
 	static String monthName;
-	static String repeatOption = "none";
+	static String repeatOption = "ONCE";
     int day = 0;
 	int month = 0 ;
     int year = 0;
 	
 	DatabaseHelper db;
 	ExpenseData expData;
+	MonthlyProgress monthlyProgress;
+	
 	public ArrayList<ExpenseData> outputFixedExpList = new ArrayList<ExpenseData>();
 	public ArrayList<ActualBudgetData> actualLimits  = new ArrayList<ActualBudgetData>();
+    public ArrayList<MonthlyProgress> monthlyProgressFromTable = new ArrayList<MonthlyProgress>();
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +85,8 @@ public class VariableExpensesActivity extends ActivityExt {
         initClearData();
         initCurrentCalendarDate();
         InitRetrieveActualBudgetData(month);
-        InitRetrieveVariableExpenseData(month);
+        getCurrentMonthProgress(month);
+        //InitRetrieveVariableExpenseData(month);
         InitSetControls();    
         InitSetControls();    
         InitDateForButtons();     
@@ -139,17 +152,90 @@ protected void onDestroy() {
 	    for(int i =0; i<actualLimits.size();i++)
 	    {
 	    	actualIncome = actualLimits.get(i).GetIncome();
+	    	actualSaving = actualLimits.get(i).GetSaving();
 	    	actualVariableExpMaxLimit = actualLimits.get(i).GetVariableActualExpense();
 	    }
     }
     else
     {
     	actualIncome = 0.0f;
+    	actualSaving = 0.0f;
     	actualVariableExpMaxLimit = 0.0f;
     	variableExpenseFromTable=0.0f;
     }
 }
 
+	
+	private void getCurrentMonthProgress(int month)
+	{
+	    db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 1);
+	    db.getWritableDatabase();
+	    String currentMonth = MONTHS[month];
+	    monthlyProgressFromTable = db.GetCurrentProgress(currentMonth);
+
+	    if (monthlyProgressFromTable.size() != 0)
+	    {
+		    for(int i =0; i<monthlyProgressFromTable.size();i++)
+		    {
+		    	monthlyIncomeProgress = monthlyProgressFromTable.get(i).mIncomeProgress;
+		    	monthlyFixedExpenseProgress = monthlyProgressFromTable.get(i).mFixedExpensesProgress;
+		    	monthlyVariableExpenseProgress = monthlyProgressFromTable.get(i).mVariableExpensesProgress;
+		    	monthlySavingProgress = monthlyProgressFromTable.get(i).mSavingProgress;
+		    	monthlyOverdrawnAmount = monthlyProgressFromTable.get(i).mOverdrawnAmount;
+		    }
+	    }
+	    else
+	    {
+	    	monthlyIncomeProgress = 0.0f;
+	    	monthlySavingProgress = 0.0f;
+	    	monthlyVariableExpenseProgress = 0.0f;
+	    }
+	    
+		//Display Actual Monthly Income and Monthly Fixed Expense
+		((TextView)findViewById(R.id.textViewActualIncome)).setText("$"+actualIncome);
+		((TextView)findViewById(R.id.textViewActualSavings)).setText("$"+actualSaving);
+		((TextView)findViewById(R.id.textViewActualVariableExpense)).setText("$"+actualVariableExpMaxLimit);
+		
+	    ((ProgressBar)findViewById(R.id.progressBarIncome)).setMax(actualIncome.intValue());
+	    if(actualIncome.intValue()-monthlyIncomeProgress.intValue() < 0)
+	    {
+	    	((ProgressBar)findViewById(R.id.progressBarIncome)).setProgress(5);
+			((TextView)findViewById(R.id.textViewIncomeProgress)).setText("OVER $"+(monthlyIncomeProgress-actualIncome));
+	    }
+	    else
+	    {
+	    	((ProgressBar)findViewById(R.id.progressBarIncome)).setProgress(actualIncome.intValue()-monthlyIncomeProgress.intValue());
+			((TextView)findViewById(R.id.textViewIncomeProgress)).setText("BALANCE $"+(actualIncome-monthlyIncomeProgress));
+	    }
+
+		((ProgressBar)findViewById(R.id.progressBarSavings)).setMax(actualSaving.intValue());
+	    if(actualSaving.intValue() - monthlyOverdrawnAmount.intValue() < 0)
+	    {
+	    	((ProgressBar)findViewById(R.id.progressBarSavings)).setProgress(5);
+			((TextView)findViewById(R.id.textViewSavingProgress)).setText("OVER $"+(monthlyOverdrawnAmount - actualSaving));
+	    }
+	    else
+	    {
+	    	((ProgressBar)findViewById(R.id.progressBarSavings)).setProgress( (actualSaving.intValue() - monthlyOverdrawnAmount.intValue()) );
+			((TextView)findViewById(R.id.textViewSavingProgress)).setText("BALANCE $"+(actualSaving - monthlyOverdrawnAmount));
+	    }
+
+		((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setMax(actualVariableExpMaxLimit.intValue());
+		if(actualVariableExpMaxLimit.intValue()-monthlyVariableExpenseProgress.intValue() < 0)
+		{
+			((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setProgress(5);
+			((TextView)findViewById(R.id.textViewVariableExpProgress)).setText("OVER $"+(monthlyVariableExpenseProgress -actualVariableExpMaxLimit));
+		}
+		else
+		{
+			((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setProgress(actualVariableExpMaxLimit.intValue()-monthlyVariableExpenseProgress.intValue());
+			((TextView)findViewById(R.id.textViewVariableExpProgress)).setText("BALANCE $"+(actualVariableExpMaxLimit-monthlyVariableExpenseProgress));
+		}
+		
+		//Display Balance for the Month
+	    
+	}
+	
 	private void InitRetrieveVariableExpenseData(int month) {
 		// TODO Auto-generated method stub
     db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 1);
@@ -181,8 +267,8 @@ protected void onDestroy() {
 	((TextView)findViewById(R.id.textViewActualVariableExpense)).setText("$"+actualVariableExpMaxLimit);
 	
 	//Display Balance for the Month
-	((TextView)findViewById(R.id.textViewIncomeProgress)).setText("Remaining $"+(actualIncome-variableExpenseFromTable));
-	((TextView)findViewById(R.id.textViewVariableExpProgress)).setText("Remaining $"+(actualVariableExpMaxLimit-variableExpenseFromTable));
+	((TextView)findViewById(R.id.textViewIncomeProgress)).setText("BALANCE $"+(actualIncome-variableExpenseFromTable));
+	((TextView)findViewById(R.id.textViewVariableExpProgress)).setText("BALANCE $"+(actualVariableExpMaxLimit-variableExpenseFromTable));
 
 	}
 
@@ -272,11 +358,18 @@ protected void onDestroy() {
 			VariableExpensesActivity.this.removeDialog(REPEAT_OPTION_ID);
 			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				
+				@SuppressLint("NewApi")
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					int radioButtonID = radgrp.getCheckedRadioButtonId();
-					RadioButton radioButton = (RadioButton) radgrp.findViewById(radioButtonID);
+					RadioButton radioButton = (RadioButton) radgrp.findViewById(radioButtonID);					
+					repeatOption = radioButton.getText().toString();
+					if(radioButton.getText().toString().isEmpty())
+						((TextView) findViewById(R.id.TextView_RepeatOption)).setText("ONCE");
+					else
+						((TextView) findViewById(R.id.TextView_RepeatOption)).setText(radioButton.getText().toString());					
+					
 					((TextView) findViewById(R.id.TextView_RepeatOption)).setText(radioButton.getText().toString());
 					VariableExpensesActivity.this.removeDialog(REPEAT_OPTION_ID);
 				}
@@ -385,7 +478,12 @@ protected void onDestroy() {
 		    	else
 		    	{
 		    	variableExpenses += Float.valueOf(amountEditText.getText().toString());
-		    	
+		    	monthlyIncomeProgress += variableExpenses;
+		    	monthlyVariableExpenseProgress += variableExpenses;	
+		    	if((actualVariableExpMaxLimit - monthlyVariableExpenseProgress) < 0)
+		    	{
+		    		monthlyOverdrawnAmount += (monthlyVariableExpenseProgress- actualVariableExpMaxLimit);
+		    	}		    	
 		    	category= storeName.getText().toString();
 		    	amount = amountEditText.getText().toString();
 		    	date = dateTextView.getText().toString();
@@ -399,11 +497,16 @@ protected void onDestroy() {
 		    		monthName = MONTHS[iMonth];
 		    	}		    	
 				//Saving lastRecord
-				SaveRecord(category, amount, date, monthName);
+		    	UpdateCurrentDisplay(monthlyIncomeProgress,monthlyVariableExpenseProgress);
+		    	//No need to pass Year and Month, No Repeat Options.
+		    	SaveRecord(category, amount, date, monthName);
+		    	UpdateMonthlyProgress(monthName);
+				
+				
 				Toast.makeText(VariableExpensesActivity.this, "Data Saved", 2).show();
+				
 				data.putExtra(BUDGET_PREFERENCES_TOTAL_VARIABLE_EXPENSES, variableExpenses);
 				data.putExtra(BUDGET_PREFERENCES_SHOPPINGDATE_MONTH, monthName);
-				setResult(RESULT_OK, data);
 		    	}
 				finish();
 
@@ -411,19 +514,35 @@ protected void onDestroy() {
 		});
     }
     
-    private void SavePreferences(String key, String value)
-    {
-    	Editor editor = mBudgetSettings.edit();
-    	editor.putString(key, value);
-    	editor.commit();
-    }
     
-    private void SaveExpenses(String key, float value)
-    {
-    	Editor editor = mBudgetSettings.edit();
-    	editor.putFloat(key, value);
-    	editor.commit();
-    }
+    /****************
+     * Update Monthly Progress Information
+     * @param fixedExpensesprogress
+     * @param monthName
+     */
+    protected void UpdateMonthlyProgress(String monthName) {
+		// TODO Auto-generated method stub
+		//Get Current Information for MonthlyIncomeProgress, SavingProgress, FixedExpenseProgress
+		db = new DatabaseHelper(getApplicationContext(), "name", null, 1);
+		db.getWritableDatabase();
+		
+		monthlyProgress = new MonthlyProgress();
+		if(monthlyOverdrawnAmount < 0)
+			monthlyProgress.mStatus = "OVERDRAWN";
+		else
+			monthlyProgress.mStatus = "INBUDGET";
+		
+		monthlyProgress.mIncomeProgress = monthlyIncomeProgress;
+		monthlyProgress.mFixedExpensesProgress = monthlyFixedExpenseProgress;
+		monthlyProgress.mSavingProgress = monthlySavingProgress;
+		monthlyProgress.mVariableExpensesProgress = monthlyVariableExpenseProgress;
+		monthlyProgress.mMonth = monthName;
+		monthlyProgress.mOverdrawnAmount = monthlyOverdrawnAmount;
+		monthlyProgress.mRepeatOption = repeatOption;
+		
+		db.UpdateMonthlyProgress(monthlyProgress);
+    	
+	}
     
     private void initClearData()
     {
@@ -470,14 +589,23 @@ protected void onDestroy() {
 			    else
 			    {
 		    	variableExpenses += Float.valueOf(amountEditText.getText().toString());
-
+		    	monthlyIncomeProgress += variableExpenses;
+		    	monthlyVariableExpenseProgress += variableExpenses;
+		    	if((actualVariableExpMaxLimit - monthlyVariableExpenseProgress) < 0)
+		    	{
+		    		monthlyOverdrawnAmount += (monthlyVariableExpenseProgress- actualVariableExpMaxLimit);
+		    	}		    	
 		    	String category= storeName.getText().toString();
 		    	String amount = amountEditText.getText().toString();
 		    	String date = dateTextView.getText().toString();
 		    	
+		    	UpdateCurrentDisplay(monthlyIncomeProgress,monthlyVariableExpenseProgress);
 				//Saving lastRecord
 				SaveRecord(category, amount, date, monthName);
+		    	UpdateMonthlyProgress(monthName);
+		    	
 		    	Toast.makeText(VariableExpensesActivity.this, "Data Saved. Please Add Another Expense", Toast.LENGTH_SHORT).show();
+		    	
 		    	((EditText)findViewById(R.id.EditText_StoreName)).setText("");
 		    	((EditText)findViewById(R.id.EditText_Amount)).setText("");
 			    }
@@ -485,6 +613,52 @@ protected void onDestroy() {
 			}
 		});
     }
+    
+    protected void UpdateCurrentDisplay(Float income, Float variableExpenseAmount) {
+		// TODO Auto-generated method stub
+
+    	//Display Actual Monthly Income and Monthly Fixed Expense
+    	((TextView)findViewById(R.id.textViewActualIncome)).setText("$"+actualIncome);
+    	((TextView)findViewById(R.id.textViewActualSavings)).setText("$"+actualSaving);
+    	((TextView)findViewById(R.id.textViewActualVariableExpense)).setText("$"+actualVariableExpMaxLimit);
+
+    	
+    	((ProgressBar)findViewById(R.id.progressBarIncome)).setMax(actualIncome.intValue());
+    	if(actualIncome.intValue()-income.intValue() < 0)
+    	{
+    		((ProgressBar)findViewById(R.id.progressBarIncome)).setProgress(5);
+        	((TextView)findViewById(R.id.textViewIncomeProgress)).setText("OVER $"+(income-actualIncome));
+    	}
+    	else
+    	{
+    		((ProgressBar)findViewById(R.id.progressBarIncome)).setProgress(actualIncome.intValue()-income.intValue());
+        	((TextView)findViewById(R.id.textViewIncomeProgress)).setText("BALANCE $"+(actualIncome-income));
+    	}
+
+    	((ProgressBar)findViewById(R.id.progressBarSavings)).setMax(actualSaving.intValue());
+    	if(actualSaving.intValue()-monthlyOverdrawnAmount.intValue() < 0)
+    	{
+    		((ProgressBar)findViewById(R.id.progressBarSavings)).setProgress(5);
+        	((TextView)findViewById(R.id.textViewSavingProgress)).setText("OVER $"+(monthlyOverdrawnAmount-actualSaving));
+    	}
+    	else
+    	{
+    		((ProgressBar)findViewById(R.id.progressBarSavings)).setProgress(actualSaving.intValue()-monthlyOverdrawnAmount.intValue());
+        	((TextView)findViewById(R.id.textViewSavingProgress)).setText("BALANCE $"+(actualSaving-monthlyOverdrawnAmount));    		
+    	}
+    	
+    	((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setMax(actualVariableExpMaxLimit.intValue());
+    	if(actualVariableExpMaxLimit.intValue() - variableExpenseAmount.intValue() < 0)
+    	{
+        	((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setProgress(5);
+        	((TextView)findViewById(R.id.textViewVariableExpProgress)).setText("OVER $"+(variableExpenseAmount-variableExpenseAmount));        	
+    	}
+    	else
+    	{
+    		((ProgressBar)findViewById(R.id.progressBarVariableExpenses)).setProgress( actualVariableExpMaxLimit.intValue() - variableExpenseAmount.intValue());
+        	((TextView)findViewById(R.id.textViewVariableExpProgress)).setText("BALANCE $"+(actualVariableExpMaxLimit-variableExpenseAmount));
+    	}
+ 	}
     
 	private void SaveRecord(String store, String amount, String date, String monthStr) {
 		// TODO Auto-generated method stub

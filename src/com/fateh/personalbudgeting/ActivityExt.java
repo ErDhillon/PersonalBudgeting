@@ -24,6 +24,9 @@ public class ActivityExt extends Activity {
     public static final String BUDGET_PREFERENCES_DATE = "date";
     public static final String BUDGET_PREFERENCES_CATEGORY = "category";
     public static final String BUDGET_PREFERENCES_REPEAT="repeat";
+    public static final String BUDGET_MONTHLY_PROGRESS_STATUS_INITIAL = "InBudget";
+    public static final String BUDGET_MONTHLY_PROGRESS_STATUS_ATPAR = "SavingMode";
+    public static final String BUDGET_MONTHLY_PROGRESS_STATUS_OVERDRAWN = "Overdrawn";
     
 
     public static final String DEBUG_TAG = "PersonalBudgetLog";

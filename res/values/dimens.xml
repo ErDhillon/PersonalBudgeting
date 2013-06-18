@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen
-        name="logo_size">24pt</dimen>
+        name="app_logo_bottom_size">8pt</dimen>
+    <dimen
+        name="app_logo_top_size">20pt</dimen>
     <dimen
         name="version_size">5pt</dimen>
     <dimen

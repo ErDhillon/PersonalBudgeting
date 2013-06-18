@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
- <ScrollView 
-     xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:id="@+id/scrollView1"
-	             android:layout_width="match_parent"
-	             android:layout_height="wrap_content"
-	             android:background="@drawable/backgroud"  >
+ <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/scrollView1"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@color/LightBlue" >
 
 	<RelativeLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
+	    android:layout_height="match_parent"
+	    android:background="@color/Azure" >
+
 	    <LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content" >
@@ -47,164 +48,210 @@
 	            android:src="@drawable/divider2" />
 	    </LinearLayout>
 
-	    <LinearLayout
-	     	android:id="@+id/linearLayout1"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="50dp"
-	        android:orientation="vertical" >
-	        <LinearLayout
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:orientation="horizontal" >
-	            <ImageButton
-	                android:id="@+id/imageButtonIncome"
-	                android:layout_width="85dp"
-	                android:layout_height="65dp"
-	                android:background="@drawable/roundcorners"
-	                android:src="@drawable/monthlyincome" />
+		<LinearLayout
+		    android:id="@+id/linearLayout2"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginTop="60dp"
+		    android:orientation="vertical" >
 
-	            <TextView
-	                android:id="@+id/textViewincomebanner"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_marginTop="20dp"
-	                android:layoutDirection="inherit"
-	                android:text="@string/monthlyincome"
-	                android:layout_marginLeft="10dp"
-	                android:textAppearance="?android:attr/textAppearanceSmall" />
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal" >
 
-	            <TextView
-	                android:id="@+id/textViewmonthlyIncome"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_marginTop="20dp"
-	                android:layout_marginLeft="45dp"
-	                android:textColor="@color/Black"
-	                android:background="@drawable/rectanglebox"
-	                android:textAppearance="?android:attr/textAppearanceMedium" />
-	        </LinearLayout>	        
-	    </LinearLayout>
+		        <ImageButton
+		            android:id="@+id/imageButtonIncome"
+		            android:layout_width="85dp"
+		            android:layout_height="65dp"
+		            android:layout_marginLeft="5dp"
+		            android:background="@drawable/roundcorners"
+		            android:src="@drawable/monthlyincome" />
 
-	    <LinearLayout
-	     	android:id="@+id/linearLayout2"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="180dp"
-	        android:orientation="vertical" >
+		        <TextView
+		            android:id="@+id/textViewincomebanner"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="10dp"
+		            android:layout_gravity="center"
+		            android:textStyle="bold"
+		            android:text="@string/monthlyincome"
+		            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" 
-    android:layout_marginTop="20dp">
+		        <TextView
+		            android:id="@+id/textViewmonthlyIncome"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="42dp"
+		            android:layout_gravity="center"
+		            android:background="@drawable/rectanglebox"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:textColor="@color/Black" />
+		    </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/imageButtonVariableExpenses"
-        android:layout_width="85dp"
-        android:layout_height="65dp"
-        android:background="@drawable/roundcorners"
-        android:src="@drawable/variableexpense" />
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal" 
+		        android:layout_marginTop="10dp">
 
-    <TextView
-        android:id="@+id/textViewvariableexpbanner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layoutDirection="inherit"
-        android:text="@string/variable"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+		        <ImageButton
+		            android:id="@+id/imageButtonSaving"
+		            android:layout_width="85dp"
+		            android:layout_height="65dp"
+		            android:layout_marginLeft="5dp"
+		            android:background="@drawable/roundcorners"
+		            android:src="@drawable/saving" />
 
-    <TextView
-        android:id="@+id/textViewVariableLimit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="60dp"
-        android:background="@drawable/rectanglebox"
-        android:textColor="@color/Black"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+		        <TextView
+		            android:id="@+id/textViewsavingbanner"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="10dp"
+		            android:layout_gravity="center"
+		            android:textStyle="bold"
+		            android:text="@string/savings"
+		            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-</LinearLayout>
-	    
-	</LinearLayout>
+		        <TextView
+		            android:id="@+id/textViewmonthlySavings"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="53dp"
+		            android:background="@drawable/rectanglebox"
+		            android:layout_gravity="center"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:textColor="@color/Black" />
+		    </LinearLayout>
+		    		    
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:orientation="horizontal" >
 
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/linearLayout1"
-	        android:layout_marginTop="10dp"
-	        android:orientation="horizontal" >
+		        <ImageButton
+		            android:id="@+id/imageButtonFixedExpenses"
+		            android:layout_width="90dp"
+		            android:layout_height="65dp"
+		            android:layout_marginLeft="5dp"
+		            android:background="@drawable/roundcorners"
+		            android:src="@drawable/fixedexpense" />
 
-	        <ImageButton
-	            android:id="@+id/imageButtonFixedExpenses"
-	            android:layout_width="90dp"
-	            android:layout_height="65dp"
-	            android:background="@drawable/roundcorners"
-	            android:src="@drawable/fixedexpense" />
+		        <TextView
+		            android:id="@+id/textViewfixedexpbanner"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="10dp"
+		            android:layout_gravity="center"
+		            android:textStyle="bold"
+		            android:text="@string/fixed"
+		            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-	        <TextView
-	            android:id="@+id/textViewfixedexpbanner"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="20dp"
-	            android:layoutDirection="inherit"
-	            android:layout_marginLeft="10dp"
-	            android:text="@string/fixed"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
+		        <TextView
+		            android:id="@+id/textViewFixedLimit"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="50dp"
+		            android:background="@drawable/rectanglebox"
+		            android:layout_gravity="center"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:textColor="@color/Black" />
+		    </LinearLayout>
 
-	        <TextView
-	            android:id="@+id/textViewFixedLimit"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="20dp"
-	            android:layout_marginLeft="80dp"
-	            android:layoutDirection="inherit"
-	            android:textColor="@color/Black"
-	            android:background="@drawable/rectanglebox"
-	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	    </LinearLayout>
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:orientation="horizontal" >
 
-	    <LinearLayout
-	        android:id="@+id/LinearLayout02"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/linearLayout2"
-	        android:layout_marginTop="21dp"
-	        android:orientation="horizontal" >
+		        <ImageButton
+		            android:id="@+id/imageButtonVariableExpenses"
+		            android:layout_width="85dp"
+		            android:layout_height="65dp"
+		            android:layout_marginLeft="5dp"
+		            android:background="@drawable/roundcorners"
+		            android:src="@drawable/variableexpense" />
 
-	        <Button
-	            android:id="@+id/Button_Repeat"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="5dp"
-	            android:minWidth="50dp"
-	            android:text="@string/repeat"
-	            android:textColor="@color/Blue" />
+		        <TextView
+		            android:id="@+id/textViewvariableexpbanner"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="10dp"
+		            android:layout_gravity="center"
+		            android:textStyle="bold"
+		            android:text="@string/variable"
+		            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-	        <TextView
-	            android:id="@+id/TextView_RepeatOption"
-	            android:layout_width="wrap_content"
-	            android:layout_height="32dp"
-	            android:layout_marginLeft="20dp"
-	            android:background="@drawable/rectanglebox"
-	            android:ems="10"
-	            android:gravity="center"
-	            android:textStyle="bold" />
-	    </LinearLayout>
+		        <TextView
+		            android:id="@+id/textViewVariableLimit"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="25dp"
+		            android:layout_gravity="center"
+		            android:background="@drawable/rectanglebox"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:textColor="@color/Black" />
+		    </LinearLayout>
+		</LinearLayout>
 
-	    <Button
-	        android:id="@+id/buttonSavetoDB"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/LinearLayout02"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginTop="30dp"
-	        android:text="SAVE" />
+		<LinearLayout
+		    android:id="@+id/LinearLayout02"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/linearLayout2"
+		    android:layout_marginTop="26dp"
+		    android:orientation="horizontal" >
 
+		    <Button
+		        android:id="@+id/Button_Repeat"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="5dp"
+		        android:minWidth="50dp"
+		        android:text="@string/repeat"
+		        android:textColor="@color/Black" />
+
+		    <TextView
+		        android:id="@+id/TextView_RepeatOption"
+		        android:layout_width="144dp"
+		        android:layout_height="32dp"
+		        android:layout_marginLeft="20dp"
+		        android:background="@drawable/rectanglebox"
+		        android:ems="10"
+		        android:gravity="center"
+		        android:textStyle="bold" />
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/LinearLayout02"
+		    android:layout_marginTop="10dp"
+		    android:orientation="vertical" >
+		    
+		<ImageButton
+		            android:id="@+id/imageButtonSaveDB"
+		            android:layout_width="75dp"
+		            android:layout_height="55dp"
+		            android:layout_marginLeft="70dp"
+		            android:background="@drawable/roundcorners"
+		            android:src="@drawable/savedb" />
+
+		<TextView
+		    android:layout_width="64dp"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="80dp"
+		    android:text="@string/savedb"
+		    android:textColor="@color/IndianRed"
+		    android:textStyle="bold" />
+		            	    
+		</LinearLayout>    
+						
 	</RelativeLayout>
 
 </ScrollView> 

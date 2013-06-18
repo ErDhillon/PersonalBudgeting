@@ -43,10 +43,14 @@ public class AccountActivity extends ActivityExt {
 	static final int VARIABLE_EXPENSES_DIALOG_ID = 2;
 	static final int FIXED_EXPENSES_DIALOG_ID = 3;
 	static final int REPEAT_OPTION_ID = 4;
+	static final int SAVING_DIALOG_ID = 5;
 	
 	static Float totalMonthlyIncome = 0.0f;
 	static Float fixedExpenditureLimit = 0.0f;
 	static Float variableExpenditureLimit = 0.0f;
+	static Float monthlySavingAmount = 0.0f;
+	static Float monthlyunallocatedAmount = 0.0f;
+	
 	static String monthName = "";
 	static String repeatOption = "none";	
 	
@@ -55,6 +59,8 @@ public class AccountActivity extends ActivityExt {
 
 	DatabaseHelper db;
 	ActualBudgetData 	bdata = new ActualBudgetData();
+	MonthlyProgress monthlyProgress = new MonthlyProgress();
+	
 	public ArrayList<ActualBudgetData> actualLimits  = new ArrayList<ActualBudgetData>();
 
 	public static final String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"};
@@ -64,9 +70,10 @@ public class AccountActivity extends ActivityExt {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account);
 		mBudgetSettings = getSharedPreferences(BUDGET, Context.MODE_PRIVATE);
-		InitRetrieveFromDatabase();
 		InitSetCurrentDate();
+		InitRetrieveFromDatabase(month);
 		InitSetIncome();
+		InitSetSavingAmount();
 		initSetFixedExpenseLimit();
 		initSetVariableExpenseLimit();
 		InitSaveDataToDatbase();
@@ -89,18 +96,67 @@ public class AccountActivity extends ActivityExt {
 
 	private void InitSaveDataToDatbase() {
 		// TODO Auto-generated method stub
-		((Button)findViewById(R.id.buttonSavetoDB)).setOnClickListener(new View.OnClickListener() {
+		((ImageButton)findViewById(R.id.imageButtonSaveDB)).setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(totalMonthlyIncome != 0.0f && fixedExpenditureLimit != 0.0f && variableExpenditureLimit != 0.0f)
 				{
-					SaveToDatabase();	
-					Toast.makeText(AccountActivity.this, "Information Saved into Database !!!", Toast.LENGTH_SHORT).show();
+					if((fixedExpenditureLimit + variableExpenditureLimit + monthlySavingAmount) > totalMonthlyIncome )
+					{
+		    		   	  new AlertDialog.Builder(AccountActivity.this)
+		    		      .setTitle("Incorrect Data")
+		    		      .setMessage("Total Monthly Income entered is less than the Expenses and Savings")
+		    		      .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+							}
+							})
+						.show();
+					}
+					else if( (fixedExpenditureLimit + variableExpenditureLimit + monthlySavingAmount) <= totalMonthlyIncome )
+					{
+		    		   	monthlyunallocatedAmount = totalMonthlyIncome - (fixedExpenditureLimit + variableExpenditureLimit + monthlySavingAmount);
+						if(monthlyunallocatedAmount > 0)
+						{
+			    		   	new AlertDialog.Builder(AccountActivity.this)
+			    		      .setTitle("Unallocated Amount")
+			    		      .setMessage("$ "+monthlyunallocatedAmount+" are not allocated. Do you want to add those to Savings?")
+			    		      .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									monthlySavingAmount += monthlyunallocatedAmount;
+									((TextView)findViewById(R.id.textViewmonthlySavings)).setText("$"+monthlySavingAmount);
+									monthlyunallocatedAmount = 0.0f;
+								}
+								})
+							.setNegativeButton("NO", new OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									
+								}
+							}).show();
+						}
+						SaveToDatabase();
+						Toast.makeText(AccountActivity.this, "Information Saved into Database.", Toast.LENGTH_SHORT).show();						
+					}
 				}
 				else
-					Toast.makeText(AccountActivity.this, "Please Enter Missing Value !!!", Toast.LENGTH_SHORT).show();
+				{
+	    		   	  new AlertDialog.Builder(AccountActivity.this)
+	    		      .setTitle("Missing Value")
+	    		      .setMessage("Please enter missing Values.")
+	    		      .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+						}
+						})
+					.show();
+
+				}
 			}
 		});
 	}
@@ -108,22 +164,57 @@ public class AccountActivity extends ActivityExt {
 	/*********
 	 * Retrieve Actual Values for monthlyIncome fixedExpenditureLimit,and VariableExpenditureLimit
 	 */
-	private void InitRetrieveFromDatabase() {
+	private void InitRetrieveFromDatabase(int month) {
 		// TODO Auto-generated method stub
-        db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 37);
+        db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 2);
         db.getWritableDatabase();
-	    final Calendar c = Calendar.getInstance();
-	    int month = c.get(Calendar.MONTH);
+
 	    String currentMonth = MONTHS[month];
 	    actualLimits = db.getCurrentBudgetData(currentMonth);
-	    
-        for(int i =0; i<actualLimits.size();i++)
-        {
-        	totalMonthlyIncome = actualLimits.get(i).GetIncome();
-        	fixedExpenditureLimit = actualLimits.get(i).GetFixedActualExpense();
-        	variableExpenditureLimit = actualLimits.get(i).GetVariableActualExpense();
-        	monthName = actualLimits.get(i).GetMonth();
-        }
+	    if(actualLimits.size() > 0)
+	    {
+	        	totalMonthlyIncome = actualLimits.get(0).GetIncome();
+	        	monthlySavingAmount = actualLimits.get(0).GetSaving();
+	        	fixedExpenditureLimit = actualLimits.get(0).GetFixedActualExpense();
+	        	variableExpenditureLimit = actualLimits.get(0).GetVariableActualExpense();
+	        	monthlyunallocatedAmount = actualLimits.get(0).GetUnallocatedAmount();
+	        	monthName = actualLimits.get(0).GetMonth();
+	    }
+	    else
+	    {
+	    	totalMonthlyIncome = 0.0f;
+	    	monthlySavingAmount = 0.0f;
+	    	fixedExpenditureLimit = 0.0f;
+	    	variableExpenditureLimit=0.0f;
+	    	monthlyunallocatedAmount = 0.0f;
+	    }
+	    ((TextView)findViewById(R.id.textViewmonthlyIncome)).setText("$"+totalMonthlyIncome);
+	    ((TextView)findViewById(R.id.textViewmonthlySavings)).setText("$"+monthlySavingAmount);
+	    ((TextView)findViewById(R.id.textViewFixedLimit)).setText("$"+fixedExpenditureLimit);
+		((TextView)findViewById(R.id.textViewVariableLimit)).setText("$"+variableExpenditureLimit);
+		
+		if(monthlyunallocatedAmount > 0.0f)
+		{
+			new AlertDialog.Builder(AccountActivity.this)
+		      .setTitle("Amount Available")
+		      .setMessage("$ "+monthlyunallocatedAmount+" are not allocated. Do you want to add those to Savings?")
+		      .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					monthlySavingAmount += monthlyunallocatedAmount;
+					((TextView)findViewById(R.id.textViewmonthlySavings)).setText("$"+monthlySavingAmount);
+					monthlyunallocatedAmount = 0.0f;
+				}
+				})
+			.setNegativeButton("NO", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			}).show();
+		}
 	}
 
 //	@Override
@@ -145,6 +236,8 @@ public class AccountActivity extends ActivityExt {
 	
 	/************
 	 * Save the values into DB 
+	 * Here we will save information into two tables
+	 * Table1 ACTUALLIMITS and Table 2 MONTHLYPROGRESS
 	 */
 	private void SaveToDatabase() {
 		// TODO Auto-generated method stub
@@ -157,13 +250,28 @@ public class AccountActivity extends ActivityExt {
 		    bdata.mMonth = MONTHS[month];
 		}
 		bdata.mIncome = totalMonthlyIncome;
+		bdata.mSaving = monthlySavingAmount;
 		bdata.mActualFixedExpenses = fixedExpenditureLimit;
 		bdata.mActualVariableExpenses = variableExpenditureLimit;
+		bdata.mUnallocatedAmount = monthlyunallocatedAmount;
 		bdata.mRepeatOption = repeatOption;
-		db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 36);
+		db = new DatabaseHelper(getApplicationContext(), "DATABASE", null, 2);
 		db.getWritableDatabase();
 		if(bdata != null)
 		db.InsertBudgetLimits(bdata);
+		
+		//Insert into MonthlyProgress for Initial Values
+//		monthlyProgress.mMonth = bdata.mMonth;
+//		monthlyProgress.mIncomeProgress = totalMonthlyIncome;
+//		monthlyProgress.mSavingProgress = monthlySavingAmount;
+//		monthlyProgress.mFixedExpensesProgress = fixedExpenditureLimit;
+//		monthlyProgress.mVariableExpensesProgress = variableExpenditureLimit;
+//		monthlyProgress.mStatus = "INITIAL";
+//		monthlyProgress.mOverdrawnAmount = 0.0f;
+//		monthlyProgress.mRepeatOption = repeatOption;
+//		db.getWritableDatabase();
+//		if(monthlyProgress != null)
+//		db.UpdateMonthlyProgress(monthlyProgress);
 	}
 
 	/*************
@@ -187,6 +295,8 @@ public class AccountActivity extends ActivityExt {
 				month = month-1;
 			    monthName = MONTHS[month];
 			    ((TextView)findViewById(R.id.textViewCurrentDate)).setText(monthName+" "+year);
+			    InitRetrieveFromDatabase(month);
+			    
 			}
 		});
 	    next.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +307,7 @@ public class AccountActivity extends ActivityExt {
 				month = month+1;
 			    monthName = MONTHS[month];
 			    ((TextView)findViewById(R.id.textViewCurrentDate)).setText(monthName+" "+year);
+			    InitRetrieveFromDatabase(month);
 			}
 		});
 	}
@@ -276,6 +387,22 @@ public class AccountActivity extends ActivityExt {
 	});
 	}
 	
+	private void InitSetSavingAmount() {
+		// TODO Auto-generated method stub
+
+	((TextView)findViewById(R.id.textViewmonthlySavings)).setText("$"+monthlySavingAmount);
+	ImageButton saving = (ImageButton)findViewById(R.id.imageButtonSaving);
+	saving.setOnClickListener(new View.OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			showDialog(SAVING_DIALOG_ID);
+			((TextView)findViewById(R.id.textViewmonthlySavings)).setText("$"+monthlySavingAmount);
+		}
+	});
+	}	
+	
 	/************
 	 * Dialogs for MonthlyIncome, FixedIncome, VariableIncome.
 	 */
@@ -286,7 +413,7 @@ public class AccountActivity extends ActivityExt {
     	LayoutInflater inflator = null;
     	View layout = null;
     	AlertDialog.Builder builder = null;
-    	AlertDialog passwordDialog = null;
+    	AlertDialog settingsDialog = null;
 		final EditText p1; final EditText p2;   	
     	switch (id) {
 		case ACCOUNT_DIALOG_ID:
@@ -322,8 +449,9 @@ public class AccountActivity extends ActivityExt {
 					}
 				}
 			});
-			passwordDialog = builder.create();
-			return passwordDialog; 
+			settingsDialog = builder.create();
+			return settingsDialog; 
+
 		case VARIABLE_EXPENSES_DIALOG_ID:
 			inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			layout = inflator.inflate(R.layout.activity_variableexpenselimit, (ViewGroup)findViewById(R.id.variableexpensesdialog));
@@ -339,17 +467,26 @@ public class AccountActivity extends ActivityExt {
 					//final Double totalIncome = Double.valueOf(p1.getText().toString()) + Double.valueOf(p2.getText().toString());;
 					if(!p1.getText().toString().isEmpty())
 					{
-						 variableExpenditureLimit = Float.parseFloat(p1.getText().toString());
+						variableExpenditureLimit = Float.parseFloat(p1.getText().toString());
+					}
+					else
+					{
+						variableExpenditureLimit = 0.0f;	
+					}
+					if(variableExpenditureLimit > 0)
+					{
 						((TextView) findViewById(R.id.textViewVariableLimit)).setText("$"+variableExpenditureLimit);
 						AccountActivity.this.removeDialog(VARIABLE_EXPENSES_DIALOG_ID);
 					}
+					else
 					{
 						Toast.makeText(AccountActivity.this, "Please Enter Variable Expense", Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
-            passwordDialog = builder.create();
-            return passwordDialog; 
+			settingsDialog = builder.create();
+            return settingsDialog; 
+
 		case FIXED_EXPENSES_DIALOG_ID:
 			inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			layout = inflator.inflate(R.layout.activity_fixedexpenselimit, (ViewGroup)findViewById(R.id.fixedexpensesdialog));
@@ -365,7 +502,14 @@ public class AccountActivity extends ActivityExt {
 				public void onClick(DialogInterface dialog, int which) {
 					if(!p1.getText().toString().isEmpty())
 					{
-						 fixedExpenditureLimit = Float.parseFloat(p1.getText().toString());
+						fixedExpenditureLimit = Float.parseFloat(p1.getText().toString());
+					}
+					else
+					{
+						fixedExpenditureLimit = 0.0f;
+					}
+					if(fixedExpenditureLimit > 0)
+					{
 						((TextView) findViewById(R.id.textViewFixedLimit)).setText("$"+fixedExpenditureLimit);
 						AccountActivity.this.removeDialog(FIXED_EXPENSES_DIALOG_ID);
 					}
@@ -374,8 +518,8 @@ public class AccountActivity extends ActivityExt {
 					}
 				}
 			});
-            passwordDialog = builder.create();
-            return passwordDialog;
+			settingsDialog = builder.create();
+            return settingsDialog;
 		case REPEAT_OPTION_ID:
 			inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			layout = inflator.inflate(R.layout.categories_list, (ViewGroup)findViewById(R.id.radio_groupDialog));	
@@ -383,7 +527,7 @@ public class AccountActivity extends ActivityExt {
 			
 			builder = new AlertDialog.Builder(this);
 			builder.setView(layout);
-			builder.setTitle("SET REPEAT OPTION");
+			builder.setTitle(R.string.settings_frequency);
 			AccountActivity.this.removeDialog(REPEAT_OPTION_ID);
 			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				
@@ -392,16 +536,50 @@ public class AccountActivity extends ActivityExt {
 					// TODO Auto-generated method stub
 					int radioButtonID = radgrp.getCheckedRadioButtonId();
 					RadioButton radioButton = (RadioButton) radgrp.findViewById(radioButtonID);
-					repeatOption = radioButton.getText().toString();
-					if(radioButton.getText().toString().isEmpty())
-						((TextView) findViewById(R.id.TextView_RepeatOption)).setText("NONE");
-					else
+					if(radioButton != null)
+					{
 						((TextView) findViewById(R.id.TextView_RepeatOption)).setText(radioButton.getText().toString());
+						repeatOption = radioButton.getText().toString();
+					}
+					else
+					{
+						((TextView) findViewById(R.id.TextView_RepeatOption)).setText("ONCE");
+						repeatOption = "ONCE";
+						Toast.makeText(AccountActivity.this, "No Frequency Selected. Once by default", Toast.LENGTH_SHORT).show();
+					}
 					AccountActivity.this.removeDialog(REPEAT_OPTION_ID);
 				}
 				});
 			dialog = builder.create();	
 			return dialog;
+
+		case SAVING_DIALOG_ID:
+			inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			layout = inflator.inflate(R.layout.savingslimit, (ViewGroup)findViewById(R.id.savinglimitDialog));
+			p1 = (EditText) layout.findViewById(R.id.editTextSetSavingAmountLimit);
+
+			builder = new AlertDialog.Builder(this);
+			builder.setView(layout);
+			builder.setTitle("SET SAVING AMOUNT");
+			AccountActivity.this.removeDialog(SAVING_DIALOG_ID);
+			builder.setPositiveButton("OK", new OnClickListener() {				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					//final Double totalIncome = Double.valueOf(p1.getText().toString()) + Double.valueOf(p2.getText().toString());;
+					if(!p1.getText().toString().isEmpty())
+					{
+						 monthlySavingAmount = Float.parseFloat(p1.getText().toString());
+						((TextView) findViewById(R.id.textViewmonthlySavings)).setText("$"+monthlySavingAmount);
+						AccountActivity.this.removeDialog(SAVING_DIALOG_ID);
+					}
+					{
+						Toast.makeText(AccountActivity.this, "Please Enter Saving Amount", Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+			settingsDialog = builder.create();
+            return settingsDialog; 
+			
 		default:
 			break;
 		}

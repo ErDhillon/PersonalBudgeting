@@ -4,35 +4,25 @@
     <string 
         name="app_name">PersonalBudgeting</string>
     <string 
-        name="menu_settings">SETTINGS</string>
+        name="menu_settings">BUDGET SETTINGS</string>
     <string 
-        name="menu_fixedexpenses">FIXED EXPENSE</string>
+        name="menu_fixedexpenses">FIXED EXPENSES</string>
     <string 
-        name="menu_variableexpenses">VARIABLE EXPENSE</string>
+        name="menu_variableexpenses">VARIABLE EXPENSES</string>
     <string 
-        name="menu_reports">REPORTS</string>
+        name="menu_reports">SUMMARY</string>
     <string
         name="splash">Splash Screen</string>
     <string
         name="help">Help Screen</string>
     <string
-        name="app_logo_top">SAVE NOW !!!</string>
+        name="app_logo_top">BUDGET BUCKET</string>
     <string
-        name="app_logo_bottom">ENJOY LATER !!!</string>
+        name="app_logo_bottom">Your Personal Budgeting Application</string>
     <string
-        name="app_version_info">Version 1.0.0\nCopyright © 2010 Fateh Software Solutions, Inc. All Rights Reserved.</string>
+        name="app_version_info">Version 1.0.0\nCopyright © 2013 Fateh Software Solutions, Inc. All Rights Reserved.</string>
     <string
         name="menu_item_main">MAIN MENU</string>
-    <string
-        name="menu_item_personal">IPersonal</string>
-    <string
-        name="menu_item_account">IAccount</string>
-    <string
-        name="menu_item_budget">IBudget</string>
-    <string
-        name="menu_item_expenses">IExpense</string>
-    <string
-        name="menu_item_expenseReports">"IReports"</string>
     <string
         name="settings">Settings</string>
      <string
@@ -100,7 +90,7 @@
     <string 
         name="addAnother">Add Another</string>
     <string
-        name="repeat">REPEAT</string>
+        name="repeat">FREQUENCY</string>
     <string 
         name="yes">YES</string>
     <string 
@@ -108,15 +98,24 @@
     <string 
         name="income">INCOME</string>
     <string 
-        name="balance">Remaining $</string>
+        name="balance">LEFT $</string>
     <string 
         name="monthlyincome">MONTHLY INCOME</string>
     <string 
-        name="otherincome">INCOME OTHER SOURCES</string>    
+        name="savings">SAVING AMOUNT</string>
     <string 
-        name="variable">VARIABLE LIMIT</string>
+        name="monthlysave">SAVINGS</string>    
     <string 
-        name="fixed">FIXED LIMIT</string>   
+        name="otherincome">OTHER INCOME</string>    
+    <string 
+        name="variable">VARIABLE EXPENSES</string>
+    <string 
+        name="fixed">FIXED EXPENSES</string>  
+      <string 
+        name="fixedexpense">EXPENSES</string> 
+        
+    <string 
+        name="savedb">SAVE</string>          
 
     <string
         name="currency">$</string>
@@ -147,7 +146,10 @@
     <string name="reportamt">AMOUNT</string>
     
     <!-- Repeat List -->
-    <string name="none">NONE</string>
+    <string name="once">ONCE</string>
     <string name="monthly">MONTHLY</string>
+    
+    <string 
+        name="settings_frequency">SET FREQUENCY</string>
     <string name="currentdate">CurrentDate</string>
 </resources>

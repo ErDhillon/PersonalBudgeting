@@ -12,7 +12,7 @@
         android:textColor="@color/AliceBlue"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="top|center"
-        android:textSize="@dimen/logo_size"></TextView>
+        android:textSize="@dimen/app_logo_top_size"></TextView>
     <TableLayout
         android:id="@+id/TableLayout01"
         android:stretchColumns="*"
@@ -62,16 +62,17 @@
         android:text="@string/app_logo_bottom"
         android:textColor="@color/article_title"
         android:gravity="center"
-        android:textSize="@dimen/logo_size"></TextView>
+        android:textSize="@dimen/app_logo_bottom_size"></TextView>
+
     <TextView
         android:id="@+id/TextViewBottomVersion"
-        android:text="@string/app_version_info"
-        android:textSize="@dimen/version_size"
-        android:textColor="@color/Crimson"
-        android:background="@color/BlueViolet"
-        android:layout_height="fill_parent"
-        android:lineSpacingExtra="@dimen/version_spacing"
         android:layout_width="fill_parent"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:gravity="center"></TextView>
+        android:layout_height="wrap_content"
+        android:background="@color/BlueViolet"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/version_spacing"
+        android:text="@string/app_version_info"
+        android:textColor="@color/Beige"
+        android:textSize="@dimen/version_size" />
+
 </LinearLayout>
