@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fateh.personalbudgeting"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="com.fateh.budgetbucket"
+    android:versionCode="2"
+    android:versionName="1.1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.fateh.personalbudgeting.SplashActivity"
+            android:name="com.fateh.budgetbucket.SplashActivity"
             android:configChanges="orientation"
             android:launchMode="singleInstance"
             android:label="@string/app_name" >
@@ -35,6 +35,6 @@
         <activity
             android:name="FixedExpensesActivity"></activity>               
         <activity
-            android:name="com.fateh.personalbudgeting.ReportsActivity"></activity>                  
+            android:name=".ReportsActivity"></activity>                  
     </application>
 </manifest>
